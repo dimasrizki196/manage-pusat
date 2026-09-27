@@ -1,0 +1,583 @@
+/* ========================================
+   USERS PAGE
+======================================== */
+
+.users-page {
+    width: 100%;
+}
+
+/* ========================================
+   PAGE HEADER
+======================================== */
+
+.users-page-header {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 1rem;
+
+    margin-bottom: 1.5rem;
+}
+
+.users-page-title {
+    margin-bottom: 0.25rem;
+
+    color: var(--coffee-text);
+
+    font-size: 1.35rem;
+
+    font-weight: 700;
+}
+
+.users-page-description {
+    margin-bottom: 0;
+
+    color: var(--coffee-muted);
+
+    font-size: var(--coffee-font-size-sm);
+}
+
+/* ========================================
+   FILTER
+======================================== */
+
+.users-filter {
+    background-color: var(--coffee-surface);
+
+    border: 1px solid var(--coffee-border);
+
+    border-radius: var(--coffee-radius-md);
+
+    box-shadow: var(--coffee-shadow-sm);
+
+    margin-bottom: 1.5rem;
+}
+
+.users-filter-body {
+    padding: 1.25rem;
+}
+
+/* ========================================
+   TABLE CONTAINER
+======================================== */
+
+.users-table-card {
+    overflow: hidden;
+
+    background-color: var(--coffee-surface);
+
+    border: 1px solid var(--coffee-border);
+
+    border-radius: var(--coffee-radius-md);
+
+    box-shadow: var(--coffee-shadow-sm);
+}
+
+.users-table-card .table {
+    margin-bottom: 0;
+}
+
+/* ========================================
+   USER INFORMATION
+======================================== */
+
+.users-user-info {
+    display: flex;
+
+    align-items: center;
+
+    gap: 0.75rem;
+}
+
+.users-user-name {
+    color: var(--coffee-text);
+
+    font-size: var(--coffee-font-size-sm);
+
+    font-weight: 600;
+}
+
+.users-user-username {
+    color: var(--coffee-muted);
+
+    font-size: var(--coffee-font-size-xs);
+}
+
+/* ========================================
+   USER ROLE
+======================================== */
+
+.users-role-admin {
+    background-color: #eeeae7;
+
+    color: #4b4039;
+}
+
+.users-role-barista {
+    background-color: var(--coffee-soft);
+
+    color: var(--coffee-primary);
+}
+
+/* ========================================
+   USER STATUS
+======================================== */
+
+.users-status-active {
+    background-color: var(--coffee-success-soft);
+
+    color: var(--coffee-success);
+}
+
+.users-status-inactive {
+    background-color: var(--coffee-danger-soft);
+
+    color: var(--coffee-danger);
+}
+
+/* ========================================
+   ACTION
+======================================== */
+
+.users-action-button {
+    width: 34px;
+    height: 34px;
+
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+
+    border: 1px solid var(--coffee-border);
+
+    border-radius: var(--coffee-radius-sm);
+
+    background-color: #ffffff;
+
+    color: var(--coffee-muted);
+
+    transition:
+        background-color var(--coffee-transition-fast),
+        color var(--coffee-transition-fast),
+        border-color var(--coffee-transition-fast);
+}
+
+.users-action-button:hover {
+    background-color: var(--coffee-soft);
+
+    border-color: var(--coffee-soft);
+
+    color: var(--coffee-primary);
+}
+
+/* ========================================
+   ACTIVITY
+======================================== */
+
+.users-activity {
+    background-color: var(--coffee-surface);
+
+    border: 1px solid var(--coffee-border);
+
+    border-radius: var(--coffee-radius-md);
+
+    box-shadow: var(--coffee-shadow-sm);
+}
+
+.users-activity-header {
+    padding: 1.25rem;
+
+    border-bottom: 1px solid var(--coffee-border);
+}
+
+.users-activity-title {
+    margin: 0;
+
+    color: var(--coffee-text);
+
+    font-size: var(--coffee-font-size-md);
+
+    font-weight: 700;
+}
+
+.users-activity-body {
+    padding: 0 1.25rem;
+}
+
+.users-activity-item {
+    display: flex;
+
+    align-items: flex-start;
+
+    justify-content: space-between;
+
+    gap: 1rem;
+
+    padding: 0.9rem 0;
+
+    border-bottom: 1px solid var(--coffee-border);
+}
+
+.users-activity-item:last-child {
+    border-bottom: 0;
+}
+
+.users-activity-label {
+    color: var(--coffee-muted);
+
+    font-size: var(--coffee-font-size-xs);
+}
+
+.users-activity-value {
+    color: var(--coffee-text);
+
+    font-size: var(--coffee-font-size-xs);
+
+    font-weight: 600;
+
+    text-align: right;
+}
+
+/* ========================================
+   USER FORM
+======================================== */
+
+.users-form-card {
+    background-color: var(--coffee-surface);
+
+    border: 1px solid var(--coffee-border);
+
+    border-radius: var(--coffee-radius-md);
+
+    box-shadow: var(--coffee-shadow-sm);
+}
+
+.users-form-body {
+    padding: 1.5rem;
+}
+
+/* ========================================
+   USER DETAIL
+======================================== */
+
+.users-detail-card {
+    background-color: var(--coffee-surface);
+
+    border: 1px solid var(--coffee-border);
+
+    border-radius: var(--coffee-radius-md);
+
+    box-shadow: var(--coffee-shadow-sm);
+}
+
+.users-detail-body {
+    padding: 1.5rem;
+}
+
+.users-profile {
+    display: flex;
+
+    align-items: center;
+
+    gap: 1rem;
+
+    margin-bottom: 1.5rem;
+}
+
+.users-profile-name {
+    margin-bottom: 0.25rem;
+
+    color: var(--coffee-text);
+
+    font-size: 1.1rem;
+
+    font-weight: 700;
+}
+
+.users-profile-username {
+    color: var(--coffee-muted);
+
+    font-size: var(--coffee-font-size-sm);
+}
+
+/* ========================================
+   USER ACTION MENU
+======================================== */
+
+.user-action-menu {
+    position: fixed;
+
+    z-index: 9999;
+
+    min-width: 190px;
+
+    padding: 0.4rem;
+
+    background: #ffffff;
+
+    border: 1px solid var(--coffee-border);
+
+    border-radius: var(--coffee-radius-md);
+
+    box-shadow: var(--coffee-shadow-lg);
+
+    animation: userActionMenuShow 0.12s ease-out;
+}
+
+/* ========================================
+   ACTION ITEM
+======================================== */
+
+.user-action-item {
+    width: 100%;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 0.7rem;
+
+    padding: 0.65rem 0.75rem;
+
+    border: 0;
+
+    border-radius: var(--coffee-radius-sm);
+
+    background: transparent;
+
+    color: var(--coffee-text);
+
+    font-size: var(--coffee-font-size-sm);
+
+    font-weight: 500;
+
+    text-decoration: none;
+
+    text-align: left;
+
+    cursor: pointer;
+
+    transition:
+        background-color var(--coffee-transition-fast),
+        color var(--coffee-transition-fast);
+}
+
+.user-action-item i {
+    width: 18px;
+
+    color: var(--coffee-muted);
+
+    font-size: 0.95rem;
+}
+
+.user-action-item:hover {
+    background-color: var(--coffee-soft);
+
+    color: var(--coffee-primary);
+
+    text-decoration: none;
+}
+
+.user-action-item:hover i {
+    color: var(--coffee-primary);
+}
+
+/* ========================================
+   BUTTON
+======================================== */
+
+.user-action-button-item {
+    appearance: none;
+
+    font-family: inherit;
+}
+
+/* ========================================
+   DANGER
+======================================== */
+
+.user-action-danger {
+    color: var(--coffee-danger);
+}
+
+.user-action-danger i {
+    color: var(--coffee-danger);
+}
+
+.user-action-danger:hover {
+    background-color: var(--coffee-danger-soft);
+
+    color: var(--coffee-danger);
+}
+
+/* ========================================
+   DIVIDER
+======================================== */
+
+.user-action-divider {
+    height: 1px;
+
+    margin: 0.35rem 0;
+
+    background-color: var(--coffee-border);
+}
+
+/* ========================================
+   ANIMATION
+======================================== */
+
+@keyframes userActionMenuShow {
+    from {
+        opacity: 0;
+
+        transform: translateY(-4px);
+    }
+
+    to {
+        opacity: 1;
+
+        transform: translateY(0);
+    }
+}
+
+/* ========================================
+   PASSWORD INPUT
+======================================== */
+
+.password-input-wrapper {
+    position: relative;
+}
+
+.password-input-wrapper .password-input {
+    padding-right: 3rem;
+}
+
+.password-toggle {
+    position: absolute;
+
+    top: 50%;
+    right: 0.75rem;
+
+    width: 32px;
+    height: 32px;
+
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    transform: translateY(-50%);
+
+    border: 0;
+
+    background: transparent;
+
+    color: var(--coffee-muted);
+
+    cursor: pointer;
+
+    border-radius: var(--coffee-radius-sm);
+
+    transition:
+        color var(--coffee-transition-fast),
+        background-color var(--coffee-transition-fast);
+}
+
+.password-toggle:hover {
+    color: var(--coffee-primary);
+
+    background-color: var(--coffee-soft);
+}
+
+.password-toggle:focus {
+    outline: none;
+
+    color: var(--coffee-primary);
+}
+
+/* ========================================
+   PAGINATION
+======================================== */
+
+.users-pagination {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    gap: 1rem;
+
+    padding: 1rem 1.25rem;
+
+    border-top: 1px solid var(--coffee-border);
+
+    background-color: #ffffff;
+}
+
+.users-pagination-info {
+    color: var(--coffee-muted);
+
+    font-size: var(--coffee-font-size-xs);
+}
+
+.users-pagination-info strong {
+    color: var(--coffee-text);
+
+    font-weight: 600;
+}
+
+@media (max-width: 767.98px) {
+    .users-pagination {
+        flex-direction: column;
+
+        align-items: flex-start;
+    }
+}
+
+/* ========================================
+   RESPONSIVE
+======================================== */
+
+@media (max-width: 767.98px) {
+    .users-page-header {
+        align-items: flex-start;
+
+        flex-direction: column;
+    }
+
+    .users-page-header .btn {
+        width: 100%;
+    }
+
+    .users-filter-body {
+        padding: 1rem;
+    }
+
+    .users-form-body {
+        padding: 1.25rem;
+    }
+
+    .users-detail-body {
+        padding: 1.25rem;
+    }
+
+    .users-activity-body {
+        padding: 0 1rem;
+    }
+
+    .users-activity-item {
+        flex-direction: column;
+
+        gap: 0.25rem;
+    }
+
+    .users-activity-value {
+        text-align: left;
+    }
+}

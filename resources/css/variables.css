@@ -1,0 +1,80 @@
+:root {
+    /* ========================================
+       COLOR
+    ======================================== */
+
+    --coffee-primary: #5a3b2b;
+    --coffee-primary-hover: #452c20;
+    --coffee-primary-active: #382219;
+
+    --coffee-secondary: #8b6f5d;
+
+    --coffee-soft: #f1e7df;
+    --coffee-soft-hover: #e8dbd1;
+
+    --coffee-background: #f8f6f4;
+
+    --coffee-surface: #ffffff;
+
+    --coffee-text: #2f2925;
+    --coffee-text-secondary: #625850;
+    --coffee-muted: #8b817a;
+
+    --coffee-border: #e7e0db;
+
+    --coffee-success: #2f7d5b;
+    --coffee-success-soft: #e8f4ee;
+
+    --coffee-danger: #c94b4b;
+    --coffee-danger-soft: #fbeaea;
+
+    --coffee-warning: #b7791f;
+    --coffee-warning-soft: #fff5df;
+
+    --coffee-info: #3976a8;
+    --coffee-info-soft: #eaf3fa;
+
+    /* ========================================
+       TYPOGRAPHY
+    ======================================== */
+
+    --coffee-font-family:
+        Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+        sans-serif;
+
+    --coffee-font-size-xs: 0.75rem;
+    --coffee-font-size-sm: 0.875rem;
+    --coffee-font-size-md: 1rem;
+    --coffee-font-size-lg: 1.125rem;
+    --coffee-font-size-xl: 1.5rem;
+    --coffee-font-size-2xl: 1.875rem;
+
+    /* ========================================
+       BORDER RADIUS
+    ======================================== */
+
+    --coffee-radius-sm: 8px;
+    --coffee-radius-md: 12px;
+    --coffee-radius-lg: 16px;
+    --coffee-radius-xl: 20px;
+
+    /* ========================================
+       SHADOW
+    ======================================== */
+
+    --coffee-shadow-sm: 0 2px 8px rgba(45, 32, 24, 0.06);
+
+    --coffee-shadow-md: 0 8px 24px rgba(45, 32, 24, 0.08);
+
+    --coffee-shadow-lg: 0 16px 40px rgba(45, 32, 24, 0.12);
+
+    /* ========================================
+       TRANSITION
+    ======================================== */
+
+    --coffee-transition-fast: 0.15s ease;
+
+    --coffee-transition: 0.25s ease;
+
+    --coffee-transition-slow: 0.35s ease;
+}
