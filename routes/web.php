@@ -6,6 +6,10 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Profile\ProfileController;
 use App\Http\Controllers\Admin\UnitController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\ItemController;
+use App\Http\Controllers\Admin\TransactionController;
+use App\Http\Controllers\Admin\RestockRequestController;
+use App\Http\Controllers\Admin\ActivityLogController;
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [
@@ -106,6 +110,49 @@ Route::middleware('auth')->group(function () {
                 'update',
                 'destroy',
             ]);
+
+            Route::resource('items', ItemController::class)
+                ->except([
+                    'create',
+                    'edit',
+                ]);
+
+            Route::patch(
+                'items/{item}/restore',
+                [ItemController::class, 'restore']
+            )->name('items.restore');
+
+            Route::delete(
+                'items/{item}/force-delete',
+                [ItemController::class, 'forceDelete']
+            )->name('items.forceDelete');
+
+            Route::resource(
+                'transactions',
+                TransactionController::class
+            )->only([
+                'index',
+                'store',
+                'show',
+            ]);
+
+            Route::resource(
+                'restock-requests',
+                RestockRequestController::class
+            )->only([
+                'index',
+                'show',
+            ]);
+
+            Route::get(
+                'activity-logs',
+                [ActivityLogController::class, 'index']
+            )->name('activity-logs.index');
+
+            Route::get(
+                'activity-logs/{id}',
+                [ActivityLogController::class, 'show']
+            )->name('activity-logs.show');
         });
 
 

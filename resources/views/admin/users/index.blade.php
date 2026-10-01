@@ -346,128 +346,77 @@
 @push('scripts')
     <script>
         function openUserActionMenu(event, user) {
-
             event.stopPropagation();
-
             const menu = document.getElementById('userActionMenu');
-
             const showButton = document.getElementById('userActionShow');
-
             const editButton = document.getElementById('userActionEdit');
-
             const divider = document.getElementById('userActionDivider');
-
             const statusForm = document.getElementById('userActionStatusForm');
             const statusButton = document.getElementById('userActionStatus');
-
             const restoreForm = document.getElementById('userActionRestoreForm');
             const restoreButton = document.getElementById('userActionRestore');
-
             const forceDeleteForm = document.getElementById('userActionForceDeleteForm');
             const forceDeleteButton = document.getElementById('userActionForceDelete');
 
-
             statusButton.addEventListener('click', function() {
-
                 const form =
                     document.getElementById('userActionStatusForm');
-
                 const userName =
                     this.dataset.userName;
-
                 openConfirmation({
-
                     title: 'Nonaktifkan Barista',
-
                     message: `Apakah Anda yakin ingin menonaktifkan ${userName}? ` +
                         `Barista tidak akan dapat digunakan untuk login.`,
-
                     action: form.action,
-
                     method: 'DELETE',
-
                     type: 'warning',
-
                     submitText: 'Ya, Nonaktifkan',
-
                     icon: 'bi-person-slash',
-
                 });
-
             });
 
             restoreButton.addEventListener('click', function() {
-
                 const form =
                     document.getElementById('userActionRestoreForm');
-
                 const userName =
                     this.dataset.userName;
-
                 openConfirmation({
-
                     title: 'Aktifkan Barista',
-
                     message: `Apakah Anda yakin ingin mengaktifkan kembali ${userName}?`,
-
                     action: form.action,
-
                     method: 'PATCH',
-
                     type: 'warning',
-
                     submitText: 'Ya, Aktifkan',
-
                     icon: 'bi-person-check',
-
                 });
-
             });
 
             forceDeleteButton.addEventListener('click', function() {
-
                 const form =
                     document.getElementById('userActionForceDeleteForm');
-
                 const userName =
                     this.dataset.userName;
-
                 openConfirmation({
-
                     title: 'Hapus Permanen',
-
                     message: `Apakah Anda yakin ingin menghapus ${userName} secara permanen? ` +
                         `Data yang dihapus tidak dapat dikembalikan.`,
-
                     action: form.action,
-
                     method: 'DELETE',
-
                     type: 'danger',
-
                     submitText: 'Ya, Hapus Permanen',
-
                     icon: 'bi-trash3',
-
                 });
-
             });
-
 
             /*
             |--------------------------------------------------------------------------
             | Set URL
             |--------------------------------------------------------------------------
             */
-
             showButton.href = user.showUrl;
-
             editButton.href = user.editUrl;
-
             statusForm.action = user.destroyUrl;
-
             restoreForm.action = user.restoreUrl;
-
             forceDeleteForm.action = user.forceDeleteUrl;
 
 
@@ -476,19 +425,12 @@
             | Reset
             |--------------------------------------------------------------------------
             */
-
             showButton.style.display = 'flex';
-
             editButton.style.display = 'none';
-
             statusForm.style.display = 'none';
-
             restoreForm.style.display = 'none';
-
             forceDeleteForm.style.display = 'none';
-
             divider.style.display = 'none';
-
 
             /*
             |--------------------------------------------------------------------------
@@ -498,15 +440,11 @@
             | Admin tidak boleh dimodifikasi melalui halaman users.
             |
             */
-
             if (user.isSelf) {
-
                 /*
                  * Admin yang sedang login hanya boleh melihat detail.
                  */
-
                 showButton.style.display = 'flex';
-
             }
 
             /*
@@ -515,13 +453,10 @@
             |--------------------------------------------------------------------------
             */
             else if (user.role === 'admin') {
-
                 /*
                  * Admin lain juga hanya boleh dilihat.
                  */
-
                 showButton.style.display = 'flex';
-
             }
 
             /*
@@ -530,34 +465,24 @@
             |--------------------------------------------------------------------------
             */
             else {
-
                 divider.style.display = 'block';
-
                 editButton.style.display = 'flex';
 
                 /*
                  * User aktif
                  */
-
                 if (!user.isTrashed) {
-
                     statusForm.style.display = 'block';
-
                     forceDeleteForm.style.display = 'block';
-
                 }
 
                 /*
                  * User nonaktif
                  */
                 else {
-
                     restoreForm.style.display = 'block';
-
                     forceDeleteForm.style.display = 'block';
-
                 }
-
             }
 
 
@@ -569,13 +494,11 @@
 
             menu.style.display = 'block';
 
-
             /*
             |--------------------------------------------------------------------------
             | Position
             |--------------------------------------------------------------------------
             */
-
             const buttonRect =
                 event.currentTarget.getBoundingClientRect();
 
@@ -600,9 +523,7 @@
             */
 
             if (left < 8) {
-
                 left = 8;
-
             }
 
 
@@ -611,14 +532,11 @@
             | Prevent overflow kiri
             |--------------------------------------------------------------------------
             */
-
             if (left + menuWidth > window.innerWidth - 8) {
-
                 left =
                     window.innerWidth -
                     menuWidth -
                     8;
-
             }
 
 
@@ -629,32 +547,22 @@
             */
 
             if (top + menuHeight > window.innerHeight - 8) {
-
                 top =
                     buttonRect.top -
                     menuHeight -
                     8;
-
             }
-
 
             /*
             |--------------------------------------------------------------------------
             | Prevent overflow atas
             |--------------------------------------------------------------------------
             */
-
             if (top < 8) {
-
                 top = 8;
-
             }
-
-
             menu.style.left = `${left}px`;
-
             menu.style.top = `${top}px`;
-
         }
 
 
@@ -665,24 +573,17 @@
         */
 
         document.addEventListener('click', function(event) {
-
             const menu =
                 document.getElementById('userActionMenu');
-
             if (!menu) {
                 return;
             }
-
-
             if (
                 !menu.contains(event.target) &&
                 !event.target.closest('.users-action-button')
             ) {
-
                 menu.style.display = 'none';
-
             }
-
         });
 
 
@@ -695,16 +596,11 @@
         window.addEventListener(
             'scroll',
             function() {
-
                 const menu =
                     document.getElementById('userActionMenu');
-
                 if (menu) {
-
                     menu.style.display = 'none';
-
                 }
-
             },
             true
         );

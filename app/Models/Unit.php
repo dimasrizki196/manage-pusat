@@ -22,8 +22,8 @@ class Unit extends Model
         return $this->belongsTo(ActivityLog::class, 'activity_id');
     }
 
-    // public function items(): HasMany
-    // {
-    //     return $this->hasMany(Item::class);
-    // }
+    public function items(): HasMany
+    {
+        return $this->hasMany(Item::class);
+    }
 }

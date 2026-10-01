@@ -7,9 +7,9 @@ use App\Http\Requests\Admin\StoreUserRequest;
 use App\Http\Requests\Admin\UpdateUserRequest;
 use App\Models\User;
 use App\Services\UserService;
+use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
@@ -40,7 +40,6 @@ class UserController extends Controller
     public function store(
         StoreUserRequest $request
     ): RedirectResponse {
-
         $this->userService->create(
             $request->validated()
         );
@@ -53,27 +52,33 @@ class UserController extends Controller
             );
     }
 
-    public function show(int $id)
+    public function show(int $id): View
     {
         $user = User::withTrashed()
+            ->with('activityLog')
             ->findOrFail($id);
 
-        return view('admin.users.show', compact('user'));
+        return view(
+            'admin.users.show',
+            compact('user')
+        );
     }
 
-    public function edit(int $id)
+    public function edit(int $id): View
     {
         $user = User::withTrashed()
             ->findOrFail($id);
 
-        return view('admin.users.edit', compact('user'));
+        return view(
+            'admin.users.edit',
+            compact('user')
+        );
     }
 
     public function update(
         UpdateUserRequest $request,
         User $user
     ): RedirectResponse {
-
         $this->ensureCanManage($user);
 
         $this->userService->update(
@@ -89,47 +94,54 @@ class UserController extends Controller
             );
     }
 
-public function destroy(int $id)
-{
-    $user = User::findOrFail($id);
+    public function destroy(int $id): RedirectResponse
+    {
+        $user = User::findOrFail($id);
 
-    if ($user->role === 'admin') {
-        abort(403);
+        $this->ensureCanManage($user);
+
+        $this->userService->softDelete($user);
+
+        return redirect()
+            ->route('admin.users.index')
+            ->with(
+                'success',
+                'User berhasil dinonaktifkan.'
+            );
     }
 
-    $user->delete();
-
-    return redirect()
-        ->route('admin.users.index')
-        ->with('success', 'User berhasil dinonaktifkan.');
-}
-
-    public function restore(int $id)
+    public function restore(int $id): RedirectResponse
     {
         $user = User::withTrashed()
             ->findOrFail($id);
 
-        $user->restore();
+        $this->ensureCanManage($user);
+
+        $this->userService->restore($user);
 
         return redirect()
             ->route('admin.users.index')
-            ->with('success', 'User berhasil diaktifkan kembali.');
+            ->with(
+                'success',
+                'User berhasil diaktifkan kembali.'
+            );
     }
 
-    public function forceDestroy(int $id)
+    public function forceDestroy(int $id): RedirectResponse
     {
         $user = User::withTrashed()
             ->findOrFail($id);
 
-        if ($user->role === 'admin') {
-            abort(403);
-        }
+        $this->ensureCanManage($user);
 
-        $user->forceDelete();
+        $this->userService->forceDelete($user);
 
         return redirect()
             ->route('admin.users.index')
-            ->with('success', 'User berhasil dihapus permanen.');
+            ->with(
+                'success',
+                'User berhasil dihapus permanen.'
+            );
     }
 
     private function ensureCanManage(User $user): void

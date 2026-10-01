@@ -29,9 +29,11 @@ class AuthController extends Controller
             remember: $request->boolean('remember')
         );
 
-        return redirect()->intended(
-            route('dashboard')
-        );
+        if ($user->role === 'admin') {
+            return redirect()->route('admin.dashboard');
+        }
+
+        return redirect()->route('barista.dashboard');
     }
 
     public function showForgotPassword()

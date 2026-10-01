@@ -1,214 +1,118 @@
 <aside class="app-sidebar">
-
     {{-- SIDEBAR HEADER --}}
     <div class="sidebar-header">
-
         <a href="{{ route('admin.dashboard') }}" class="sidebar-brand">
             <div class="sidebar-brand-icon">
                 <i class="bi bi-cup-hot-fill"></i>
             </div>
-
             <div class="sidebar-brand-text">
                 <strong>Kopi Pusat</strong>
                 <span>Stock Management</span>
             </div>
         </a>
-
     </div>
-
 
     {{-- SIDEBAR MENU --}}
     <nav class="sidebar-nav">
 
-        {{-- =========================
-             UTAMA
-        ========================== --}}
-
+        {{-- UTAMA --}}
         <div class="sidebar-section">
-
-            <span class="sidebar-section-title">
-                UTAMA
-            </span>
+            <span class="sidebar-section-title">UTAMA</span>
 
             <a href="{{ route('admin.dashboard') }}"
                 class="sidebar-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
                 <i class="bi bi-grid-1x2"></i>
-
-                <span>
-                    Dashboard
-                </span>
+                <span>Dashboard</span>
             </a>
-
         </div>
 
-
-        {{-- =========================
-             MASTER DATA
-        ========================== --}}
-
+        {{-- MASTER DATA --}}
         <div class="sidebar-section">
+            <span class="sidebar-section-title">MASTER DATA</span>
 
-            <span class="sidebar-section-title">
-                MASTER DATA
-            </span>
-
-
-            {{-- BARANG --}}
-
-            <a href="#" class="sidebar-link disabled" title="Fitur belum tersedia">
+            <a href="{{ route('admin.items.index') }}"
+                class="sidebar-link {{ request()->routeIs('admin.items.*') ? 'active' : '' }}">
                 <i class="bi bi-box-seam"></i>
-
-                <span>
-                    Barang
-                </span>
-
-                <small>
-                    Soon
-                </small>
+                <span>Barang</span>
             </a>
-
-
-            {{-- UNIT --}}
-
-            <a href="{{ route('admin.units.index') }}"
-                class="sidebar-link {{ request()->routeIs('units.*') ? 'active' : '' }}">
-                <i class="bi bi-rulers"></i>
-
-                <span>
-                    Unit
-                </span>
-            </a>
-
-
-            {{-- KATEGORI --}}
 
             <a href="{{ route('admin.categories.index') }}"
-                class="sidebar-link {{ request()->routeIs('categories.*') ? 'active' : '' }}">
+                class="sidebar-link {{ request()->routeIs('admin.categories.*') ? 'active' : '' }}">
                 <i class="bi bi-tags"></i>
-
-                <span>
-                    Kategori
-                </span>
+                <span>Kategori</span>
             </a>
 
+            <a href="{{ route('admin.units.index') }}"
+                class="sidebar-link {{ request()->routeIs('admin.units.*') ? 'active' : '' }}">
+                <i class="bi bi-rulers"></i>
+                <span>Satuan</span>
+            </a>
         </div>
 
-
-        {{-- =========================
-             MANAJEMEN
-        ========================== --}}
-
+        {{-- OPERASIONAL --}}
         <div class="sidebar-section">
+            <span class="sidebar-section-title">OPERASIONAL</span>
 
-            <span class="sidebar-section-title">
-                MANAJEMEN
-            </span>
+            <a href="{{ route('admin.transactions.index') }}"
+                class="sidebar-link {{ request()->routeIs('admin.transactions.*') ? 'active' : '' }}">
+                <i class="bi bi-arrow-left-right"></i>
+                <span>Transaksi Stok</span>
+            </a>
 
+            {{-- Jika route restock request sudah dibuat --}}
+            @if (Route::has('admin.restock-requests.index'))
+                <a href="{{ route('admin.restock-requests.index') }}"
+                    class="sidebar-link {{ request()->routeIs('admin.restock-requests.*') ? 'active' : '' }}">
+                    <i class="bi bi-clipboard-check"></i>
+                    <span>Ajuan Restock</span>
+                </a>
+            @endif
+        </div>
 
-            {{-- PENGGUNA --}}
+        {{-- MANAJEMEN --}}
+        <div class="sidebar-section">
+            <span class="sidebar-section-title">MANAJEMEN</span>
 
             <a href="{{ route('admin.users.index') }}"
-                class="sidebar-link {{ request()->routeIs('users.*') ? 'active' : '' }}">
+                class="sidebar-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
                 <i class="bi bi-people"></i>
-
-                <span>
-                    Pengguna
-                </span>
+                <span>Pengguna</span>
             </a>
-
-
-            {{-- RIWAYAT TRANSAKSI --}}
-
-            <a href="#" class="sidebar-link disabled" title="Fitur belum tersedia">
-                <i class="bi bi-arrow-left-right"></i>
-
-                <span>
-                    Riwayat Transaksi
-                </span>
-
-                <small>
-                    Soon
-                </small>
-            </a>
-
         </div>
 
-
-        {{-- =========================
-             SISTEM
-        ========================== --}}
-
+        {{-- SISTEM --}}
         <div class="sidebar-section">
+            <span class="sidebar-section-title">SISTEM</span>
 
-            <span class="sidebar-section-title">
-                SISTEM
-            </span>
-
-
-            {{-- ACTIVITY LOG --}}
-
-            <a href="#" class="sidebar-link disabled" title="Fitur belum tersedia">
+            <a href="{{ route('admin.activity-logs.index') }}"
+                class="sidebar-link {{ request()->routeIs('admin.activity-logs.*') ? 'active' : '' }}">
                 <i class="bi bi-clock-history"></i>
-
-                <span>
-                    Activity Log
-                </span>
-
-                <small>
-                    Soon
-                </small>
+                <span>Activity Log</span>
             </a>
-
         </div>
-
     </nav>
-
 
     {{-- SIDEBAR FOOTER --}}
     <div class="sidebar-footer">
 
-        {{-- PROFILE --}}
+        {{-- APPLICATION STATUS --}}
+        <div class="sidebar-status">
+            <span class="sidebar-status-dot"></span>
 
-        <a href="{{ route('profile.index') }}"
-            class="sidebar-profile-link {{ request()->routeIs('profile.*') ? 'active' : '' }}">
-
-            <div class="sidebar-profile-avatar">
-                {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+            <div class="sidebar-status-info">
+                <strong>System Online</strong>
+                <span>Kopi Pusat</span>
             </div>
-
-            <div class="sidebar-profile-info">
-
-                <strong>
-                    {{ auth()->user()->name }}
-                </strong>
-
-                <span>
-                    {{ ucfirst(auth()->user()->role) }}
-                </span>
-
-            </div>
-
-            <i class="bi bi-chevron-right"></i>
-
-        </a>
-
+        </div>
 
         {{-- LOGOUT --}}
-
         <form action="{{ route('logout') }}" method="POST" class="sidebar-logout-form">
-
             @csrf
 
             <button type="submit" class="sidebar-logout-button">
                 <i class="bi bi-box-arrow-right"></i>
-
-                <span>
-                    Logout
-                </span>
+                <span>Logout</span>
             </button>
-
         </form>
-
     </div>
-
 </aside>

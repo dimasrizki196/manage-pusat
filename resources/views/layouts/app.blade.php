@@ -65,46 +65,28 @@
 
             <header class="app-topbar">
 
-
                 {{-- MOBILE MENU --}}
-
                 <button type="button" class="mobile-menu-button" id="mobileMenuButton" aria-label="Buka menu">
                     <i class="bi bi-list"></i>
                 </button>
 
-
+                {{-- PAGE / TOPBAR SPACER --}}
                 <div class="topbar-spacer"></div>
 
+                {{-- USER PROFILE --}}
+                <a href="{{ route('profile.index') }}" class="topbar-profile" title="Buka profil">
 
-                {{-- USER --}}
+                    <div class="topbar-profile-info">
+                        <strong>{{ auth()->user()->name }}</strong>
+                        <span>{{ ucfirst(auth()->user()->role) }}</span>
+                    </div>
 
-                <div class="topbar-user">
+                    <div class="topbar-avatar">
+                        {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
+                    </div>
 
-                    <a href="{{ route('profile.index') }}" class="topbar-user text-decoration-none" title="Profile">
-
-                        <div class="topbar-user-info">
-
-                            <strong>
-                                {{ auth()->user()->name }}
-                            </strong>
-
-                            <span>
-                                {{ ucfirst(auth()->user()->role) }}
-                            </span>
-
-                        </div>
-
-
-                        <div class="topbar-avatar">
-
-                            {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
-
-                        </div>
-
-                    </a>
-
-                </div>
-
+                    <i class="bi bi-chevron-down topbar-profile-arrow"></i>
+                </a>
             </header>
 
 
