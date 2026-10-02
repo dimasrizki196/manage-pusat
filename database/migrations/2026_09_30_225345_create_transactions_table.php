@@ -6,42 +6,36 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
+    /**
+     * Run the migrations.
+     */
     public function up(): void
     {
-        Schema::create('activity_log', function (Blueprint $table) {
+        Schema::create('transactions', function (Blueprint $table) {
             $table->id();
 
-            $table->string('table_name');
-            $table->unsignedBigInteger('record_id');
+            // Relasi Foreign Key
+            $table->foreignId('item_id')->constrained('items')->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
 
-            $table->foreignId('created_by')
-                ->nullable()
-                ->constrained('users')
-                ->nullOnDelete();
+            // Kolom Tipe Transaksi
+            $table->string('transaction_type');
 
-            $table->timestamp('created_at')->nullable();
+            // Kolom Desimal (total 10 digit, 2 digit di belakang koma)
+            $table->decimal('quantity', 10, 2);
+            $table->decimal('stock_before', 10, 2);
+            $table->decimal('stock_after', 10, 2);
 
-            $table->foreignId('updated_by')
-                ->nullable()
-                ->constrained('users')
-                ->nullOnDelete();
+            // Relasi ke tabel log aktivitas (asumsi nama tabel: activity_logs)
+            $table->foreignId('activity_id')->nullable()->constrained('activity_logs')->nullOnDelete();
 
-            $table->timestamp('updated_at')->nullable();
-
-            $table->foreignId('deleted_by')
-                ->nullable()
-                ->constrained('users')
-                ->nullOnDelete();
-
-            $table->timestamp('deleted_at')->nullable();
-
-            $table->index([
-                'table_name',
-                'record_id',
-            ]);
+            // public $timestamps = false; pada model berarti tidak ada $table->timestamps();
         });
     }
 
+    /**
+     * Reverse the migrations.
+     */
     public function down(): void
     {
         Schema::dropIfExists('transactions');
