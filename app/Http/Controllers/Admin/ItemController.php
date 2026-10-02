@@ -20,21 +20,22 @@ class ItemController extends Controller
         private ItemService $itemService
     ) {}
 
-    public function index(Request $request): View
+    public function index(Request $request)
     {
         $items = $this->itemService->paginate(
             $request->only([
                 'search',
                 'category_id',
                 'status',
-            ])
+            ]),
+            10
         );
 
-        $categories = Category::query()
+        $categories = Category::with('activity')
             ->orderBy('name')
             ->get();
 
-        $units = Unit::query()
+        $units = Unit::with('activity')
             ->orderBy('name')
             ->get();
 

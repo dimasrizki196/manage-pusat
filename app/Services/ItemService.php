@@ -26,58 +26,38 @@ class ItemService
                 $filters['search'] ?? null,
                 function ($query, $search) {
                     $query->where(function ($q) use ($search) {
-                        $q->where(
-                            'name',
-                            'like',
-                            "%{$search}%"
-                        )
-                            ->orWhereHas(
-                                'category',
-                                function ($category) use ($search) {
-                                    $category->where(
-                                        'name',
-                                        'like',
-                                        "%{$search}%"
-                                    );
-                                }
-                            );
+                        $q->where('name', 'like', "%{$search}%")
+                            ->orWhereHas('category', function ($category) use ($search) {
+                                $category->where('name', 'like', "%{$search}%");
+                            })
+                            ->orWhereHas('unit', function ($unit) use ($search) {
+                                $unit->where('name', 'like', "%{$search}%");
+                            });
                     });
                 }
             )
             ->when(
                 $filters['category_id'] ?? null,
                 function ($query, $categoryId) {
-                    $query->where(
-                        'category_id',
-                        $categoryId
-                    );
+                    $query->where('category_id', $categoryId);
                 }
             )
             ->when(
-                isset($filters['status']) &&
-                    $filters['status'] !== '',
+                isset($filters['status']) && $filters['status'] !== '',
                 function ($query) use ($filters) {
-
                     if ($filters['status'] === 'active') {
-                        $query->whereHas(
-                            'activity',
-                            function ($activity) {
-                                $activity->whereNull(
-                                    'deleted_at'
-                                );
-                            }
-                        );
+                        $query->where(function ($q) {
+                            $q->whereDoesntHave('activity')
+                                ->orWhereHas('activity', function ($activity) {
+                                    $activity->whereNull('deleted_at');
+                                });
+                        });
                     }
 
                     if ($filters['status'] === 'inactive') {
-                        $query->whereHas(
-                            'activity',
-                            function ($activity) {
-                                $activity->whereNotNull(
-                                    'deleted_at'
-                                );
-                            }
-                        );
+                        $query->whereHas('activity', function ($activity) {
+                            $activity->whereNotNull('deleted_at');
+                        });
                     }
                 }
             )
@@ -143,8 +123,6 @@ class ItemService
         int $userId
     ): void {
         DB::transaction(function () use ($item, $userId) {
-            $item->delete();
-
             $this->activityLogService->delete(
                 $item,
                 $userId
@@ -153,7 +131,7 @@ class ItemService
     }
 
     public function forceDelete(
-        Item $item,
+        Item $item
     ): void {
         DB::transaction(function () use ($item) {
             $item->forceDelete();

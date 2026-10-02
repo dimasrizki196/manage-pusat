@@ -4,234 +4,134 @@
 
 @section('content')
 
-    <div class="container-fluid py-4">
-
-        <div class="mb-4">
-
-            <a href="{{ route('admin.users.index') }}" class="text-decoration-none text-muted small">
-                <i class="bi bi-arrow-left me-1"></i>
-                Kembali ke Users
-            </a>
-
-            <h1 class="h4 fw-bold mt-3 mb-1">
-                Detail User
-            </h1>
-
+    <div class="users-page">
+        <div class="page-header">
+            <div class="page-header-content">
+                <div class="users-breadcrumb">
+                    <a href="{{ route('admin.users.index') }}">
+                        <i class="bi bi-people"></i>
+                        Users
+                    </a>
+                    <i class="bi bi-chevron-right"></i>
+                    <span>Detail User</span>
+                </div>
+                <h1 class="page-title">Detail User</h1>
+                <p class="page-subtitle">Informasi akun dan riwayat aktivitas pengguna.</p>
+            </div>
+            <div class="page-header-actions">
+                <a href="{{ route('admin.users.index') }}" class="btn btn-light users-back-button">
+                    <i class="bi bi-arrow-left"></i>
+                    Kembali
+                </a>
+            </div>
         </div>
 
-
-        <div class="row g-4">
-
-            {{-- PROFILE --}}
-            <div class="col-lg-7">
-
-                <div class="card border-0 shadow-sm">
-
-                    <div class="card-body p-4">
-
-                        <div class="d-flex align-items-center gap-3 mb-4">
-
-                            <div class="user-avatar user-avatar-lg">
-                                {{ strtoupper(substr($user->name, 0, 1)) }}
-                            </div>
-
-                            <div>
-
-                                <h2 class="h5 mb-1 fw-bold">
-                                    {{ $user->name }}
-                                </h2>
-
-                                <span class="text-muted">
-                                    {{ '@' . $user->username }}
-                                </span>
-
-                            </div>
-
+        <div class="users-detail-grid">
+            <div class="users-detail-card">
+                <div class="users-detail-header">
+                    <div class="users-detail-profile">
+                        <div class="users-avatar users-avatar-lg">
+                            {{ strtoupper(substr($user->name, 0, 1)) }}
                         </div>
+                        <div>
+                            <h2>{{ $user->name }}</h2>
+                            <span>{{ '@' . $user->username }}</span>
+                        </div>
+                    </div>
+                </div>
 
-
-                        <div class="row g-4">
-
-                            <div class="col-md-6">
-
-                                <small class="text-muted d-block">
-                                    Nama
-                                </small>
-
-                                <strong>
-                                    {{ $user->name }}
-                                </strong>
-
-                            </div>
-
-
-                            <div class="col-md-6">
-
-                                <small class="text-muted d-block">
-                                    Username
-                                </small>
-
-                                <strong>
-                                    {{ $user->username }}
-                                </strong>
-
-                            </div>
-
-
-                            <div class="col-md-6">
-
-                                <small class="text-muted d-block">
-                                    Nomor HP
-                                </small>
-
-                                <strong>
-                                    {{ $user->phone_number ?? '-' }}
-                                </strong>
-
-                            </div>
-
-
-                            <div class="col-md-6">
-
-                                <small class="text-muted d-block">
-                                    Role
-                                </small>
-
-                                <strong>
-                                    {{ ucfirst($user->role) }}
-                                </strong>
-
-                            </div>
-
-
-                            <div class="col-md-6">
-
-                                <small class="text-muted d-block">
-                                    Status
-                                </small>
-
+                <div class="users-detail-body">
+                    <div class="users-detail-list">
+                        <div class="users-detail-row">
+                            <span class="users-detail-label">Nama</span>
+                            <strong class="users-detail-value">{{ $user->name }}</strong>
+                        </div>
+                        <div class="users-detail-row">
+                            <span class="users-detail-label">Username</span>
+                            <strong class="users-detail-value">{{ $user->username }}</strong>
+                        </div>
+                        <div class="users-detail-row">
+                            <span class="users-detail-label">Nomor HP</span>
+                            <strong class="users-detail-value">{{ $user->phone_number ?? '—' }}</strong>
+                        </div>
+                        <div class="users-detail-row">
+                            <span class="users-detail-label">Role</span>
+                            <strong class="users-detail-value">
+                                @if ($user->role === 'admin')
+                                    <span class="users-role-badge users-role-admin">Admin</span>
+                                @else
+                                    <span class="users-role-badge users-role-barista">Barista</span>
+                                @endif
+                            </strong>
+                        </div>
+                        <div class="users-detail-row">
+                            <span class="users-detail-label">Status</span>
+                            <strong class="users-detail-value">
                                 @if ($user->trashed())
-                                    <span class="text-danger fw-semibold">
+                                    <span class="users-status-badge users-status-inactive">
+                                        <i class="bi bi-x-circle"></i>
                                         Nonaktif
                                     </span>
                                 @else
-                                    <span class="text-success fw-semibold">
+                                    <span class="users-status-badge users-status-active">
+                                        <i class="bi bi-check-circle"></i>
                                         Aktif
                                     </span>
                                 @endif
-
-                            </div>
-
+                            </strong>
                         </div>
-
                     </div>
-
                 </div>
-
             </div>
 
-
-            {{-- ACTIVITY --}}
-            <div class="col-lg-5">
-
-                <div class="card border-0 shadow-sm">
-
-                    <div class="card-header bg-white border-0 p-4">
-
-                        <h3 class="h6 fw-bold mb-0">
-                            Activity
-                        </h3>
-
+            <div class="users-activity">
+                <div class="users-activity-header">
+                    <div>
+                        <h2 class="users-activity-title">Activity</h2>
+                        <p>Riwayat aktivitas akun pengguna.</p>
                     </div>
-
-
-                    <div class="card-body px-4 pt-0">
-
-                        <div class="activity-item">
-
-                            <span>
-                                Dibuat
-                            </span>
-
-                            <strong>
-                                {{ $user->activityLog?->created_at?->format('d M Y H:i') ?? '-' }}
-                            </strong>
-
-                        </div>
-
-
-                        <div class="activity-item">
-
-                            <span>
-                                Dibuat oleh
-                            </span>
-
-                            <strong>
-                                {{ $user->activityLog?->creator?->name ?? 'System' }}
-                            </strong>
-
-                        </div>
-
-
-                        <div class="activity-item">
-
-                            <span>
-                                Terakhir diperbarui
-                            </span>
-
-                            <strong>
-                                {{ $user->activityLog?->updated_at?->format('d M Y H:i') ?? '-' }}
-                            </strong>
-
-                        </div>
-
-
-                        <div class="activity-item">
-
-                            <span>
-                                Diperbarui oleh
-                            </span>
-
-                            <strong>
-                                {{ $user->activityLog?->updater?->name ?? '-' }}
-                            </strong>
-
-                        </div>
-
-
-                        <div class="activity-item">
-
-                            <span>
-                                Dinonaktifkan
-                            </span>
-
-                            <strong>
-                                {{ $user->activityLog?->deleted_at?->format('d M Y H:i') ?? '-' }}
-                            </strong>
-
-                        </div>
-
-
-                        <div class="activity-item">
-
-                            <span>
-                                Dinonaktifkan oleh
-                            </span>
-
-                            <strong>
-                                {{ $user->activityLog?->deleter?->name ?? '-' }}
-                            </strong>
-
-                        </div>
-
-                    </div>
-
                 </div>
 
+                <div class="users-activity-body">
+                    <div class="users-activity-item">
+                        <span class="users-activity-label">Dibuat</span>
+                        <strong class="users-activity-value">
+                            {{ $user->activityLog?->created_at?->format('d-m-Y H:i') ?? '—' }}
+                        </strong>
+                    </div>
+                    <div class="users-activity-item">
+                        <span class="users-activity-label">Dibuat oleh</span>
+                        <strong class="users-activity-value">
+                            {{ $user->activityLog?->creator?->name ?? 'System' }}
+                        </strong>
+                    </div>
+                    <div class="users-activity-item">
+                        <span class="users-activity-label">Terakhir diperbarui</span>
+                        <strong class="users-activity-value">
+                            {{ $user->activityLog?->updated_at?->format('d-m-Y H:i') ?? '—' }}
+                        </strong>
+                    </div>
+                    <div class="users-activity-item">
+                        <span class="users-activity-label">Diperbarui oleh</span>
+                        <strong class="users-activity-value">
+                            {{ $user->activityLog?->updater?->name ?? '—' }}
+                        </strong>
+                    </div>
+                    <div class="users-activity-item">
+                        <span class="users-activity-label">Dinonaktifkan</span>
+                        <strong class="users-activity-value">
+                            {{ $user->activityLog?->deleted_at?->format('d-m-Y H:i') ?? '—' }}
+                        </strong>
+                    </div>
+                    <div class="users-activity-item">
+                        <span class="users-activity-label">Dinonaktifkan oleh</span>
+                        <strong class="users-activity-value">
+                            {{ $user->activityLog?->deleter?->name ?? '—' }}
+                        </strong>
+                    </div>
+                </div>
             </div>
-
         </div>
 
     </div>
-
 @endsection

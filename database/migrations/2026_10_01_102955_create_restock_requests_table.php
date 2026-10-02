@@ -45,9 +45,6 @@ return new class extends Migration
                 ->constrained('activity_logs', 'id')
                 ->nullOnDelete();
 
-            $table->timestamps();
-            $table->softDeletes();
-
             $table->index('status');
             $table->index('item_id');
             $table->index('user_id');

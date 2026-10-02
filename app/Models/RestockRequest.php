@@ -3,11 +3,13 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class RestockRequest extends Model
 {
-    use SoftDeletes;
+    protected $table = 'restock_requests';
+
+    public $timestamps = false;
 
     protected $fillable = [
         'item_id',
@@ -26,23 +28,29 @@ class RestockRequest extends Model
         'processed_at' => 'datetime',
     ];
 
-    public function item()
+    public function item(): BelongsTo
     {
         return $this->belongsTo(Item::class);
     }
 
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function processor()
+    public function processor(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'processed_by');
+        return $this->belongsTo(
+            User::class,
+            'processed_by'
+        );
     }
 
-    public function activity()
+    public function activity(): BelongsTo
     {
-        return $this->belongsTo(ActivityLog::class, 'activity_id');
+        return $this->belongsTo(
+            ActivityLog::class,
+            'activity_id'
+        );
     }
 }

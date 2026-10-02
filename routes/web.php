@@ -8,8 +8,9 @@ use App\Http\Controllers\Admin\UnitController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ItemController;
 use App\Http\Controllers\Admin\TransactionController;
-use App\Http\Controllers\Admin\RestockRequestController;
+use App\Http\Controllers\Admin\RestockRequestController as AdminRestockRequestController;
 use App\Http\Controllers\Admin\ActivityLogController;
+use App\Http\Controllers\Barista\RestockRequestController as BaristaRestockRequestController;
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [
@@ -136,13 +137,30 @@ Route::middleware('auth')->group(function () {
                 'show',
             ]);
 
-            Route::resource(
-                'restock-requests',
-                RestockRequestController::class
-            )->only([
-                'index',
-                'show',
-            ]);
+            Route::prefix('restock-requests')
+                ->name('restock-requests.')
+                ->group(function () {
+                    Route::get('/', [AdminRestockRequestController::class, 'index'])
+                        ->name('index');
+
+                    Route::get('/{id}', [AdminRestockRequestController::class, 'show'])
+                        ->name('show');
+
+                    Route::patch('/{id}/approve', [AdminRestockRequestController::class, 'approve'])
+                        ->name('approve');
+
+                    Route::patch('/{id}/reject', [AdminRestockRequestController::class, 'reject'])
+                        ->name('reject');
+
+                    Route::delete('/{id}', [AdminRestockRequestController::class, 'destroy'])
+                        ->name('destroy');
+
+                    Route::patch('/{id}/restore', [AdminRestockRequestController::class, 'restore'])
+                        ->name('restore');
+
+                    Route::delete('/{id}/force', [AdminRestockRequestController::class, 'forceDestroy'])
+                        ->name('force-destroy');
+                });
 
             Route::get(
                 'activity-logs',
@@ -169,5 +187,39 @@ Route::middleware('auth')->group(function () {
 
             Route::view('/dashboard', 'barista.dashboard')
                 ->name('dashboard');
+
+            Route::resource(
+                'transactions',
+                TransactionController::class
+            )->only([
+                'index',
+                'store',
+                'show',
+            ]);
+
+            Route::prefix('restock-requests')
+                ->name('restock-requests.')
+                ->group(function () {
+                    Route::get('/', [BaristaRestockRequestController::class, 'index'])
+                        ->name('index');
+
+                    Route::get('/create', [BaristaRestockRequestController::class, 'create'])
+                        ->name('create');
+
+                    Route::post('/', [BaristaRestockRequestController::class, 'store'])
+                        ->name('store');
+
+                    Route::get('/{id}', [BaristaRestockRequestController::class, 'show'])
+                        ->name('show');
+
+                    Route::get('/{id}/edit', [BaristaRestockRequestController::class, 'edit'])
+                        ->name('edit');
+
+                    Route::put('/{id}', [BaristaRestockRequestController::class, 'update'])
+                        ->name('update');
+
+                    Route::delete('/{id}', [BaristaRestockRequestController::class, 'destroy'])
+                        ->name('destroy');
+                });
         });
 });
