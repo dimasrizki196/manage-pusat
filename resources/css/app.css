@@ -12,3 +12,5 @@
 @import './admin/transactions.css';
 @import './admin/restock-requests.css';
 @import './admin/activity-log.css';
+@import "./barista/transactions.css";
+@import "./barista/restock-requests.css";

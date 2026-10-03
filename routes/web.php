@@ -7,10 +7,13 @@ use App\Http\Controllers\Profile\ProfileController;
 use App\Http\Controllers\Admin\UnitController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\ItemController;
-use App\Http\Controllers\Admin\TransactionController;
+use App\Http\Controllers\Admin\TransactionController as AdminTransactionController;
 use App\Http\Controllers\Admin\RestockRequestController as AdminRestockRequestController;
 use App\Http\Controllers\Admin\ActivityLogController;
 use App\Http\Controllers\Barista\RestockRequestController as BaristaRestockRequestController;
+use App\Http\Controllers\Barista\TransactionController as BaristaTransactionController;
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Barista\DashboardController as BaristaDashboardController;
 
 Route::middleware('guest')->group(function () {
     Route::get('/login', [
@@ -67,7 +70,7 @@ Route::middleware('auth')->group(function () {
         ->name('admin.')
         ->group(function () {
 
-            Route::view('/dashboard', 'admin.dashboard')
+            Route::get('/dashboard', [AdminDashboardController::class, 'index'])
                 ->name('dashboard');
 
             Route::resource(
@@ -130,7 +133,7 @@ Route::middleware('auth')->group(function () {
 
             Route::resource(
                 'transactions',
-                TransactionController::class
+                AdminTransactionController::class
             )->only([
                 'index',
                 'store',
@@ -185,17 +188,21 @@ Route::middleware('auth')->group(function () {
         ->name('barista.')
         ->group(function () {
 
-            Route::view('/dashboard', 'barista.dashboard')
+            Route::get('/dashboard', [BaristaDashboardController::class, 'index'])
                 ->name('dashboard');
 
-            Route::resource(
-                'transactions',
-                TransactionController::class
-            )->only([
-                'index',
-                'store',
-                'show',
-            ]);
+            Route::prefix('transactions')
+                ->name('transactions.')
+                ->controller(BaristaTransactionController::class)
+                ->group(function () {
+                    Route::get('/incoming', 'incoming')->name('incoming');
+                    Route::post('/incoming', 'storeIncoming')->name('incoming.store');
+
+                    Route::get('/outgoing', 'outgoing')->name('outgoing');
+                    Route::post('/outgoing', 'storeOutgoing')->name('outgoing.store');
+
+                    Route::get('/history', 'history')->name('history');
+                });
 
             Route::prefix('restock-requests')
                 ->name('restock-requests.')

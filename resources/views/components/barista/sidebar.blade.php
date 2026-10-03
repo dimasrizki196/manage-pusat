@@ -36,6 +36,24 @@
                 <i class="bi bi-clipboard-check"></i>
                 <span>Pengajuan Restock</span>
             </a>
+
+            <a href="{{ route('barista.transactions.incoming') }}"
+                class="sidebar-link {{ request()->routeIs('barista.transactions.incoming') ? 'active' : '' }}">
+                <i class="bi bi-box-arrow-in-down"></i>
+                <span>Barang Masuk</span>
+            </a>
+
+            <a href="{{ route('barista.transactions.outgoing') }}"
+                class="sidebar-link {{ request()->routeIs('barista.transactions.outgoing') ? 'active' : '' }}">
+                <i class="bi bi-box-arrow-up"></i>
+                <span>Barang Keluar</span>
+            </a>
+
+            <a href="{{ route('barista.transactions.history') }}"
+                class="sidebar-link {{ request()->routeIs('barista.transactions.history') ? 'active' : '' }}">
+                <i class="bi bi-clock-history"></i>
+                <span>Riwayat Transaksi</span>
+            </a>
         </div>
 
     </nav>

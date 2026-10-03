@@ -1,905 +1,1371 @@
-/* =========================================================
-   BARISTA - RESTOCK REQUESTS
-   Index + Create + Edit + Show
-   ========================================================= */
+/* ========================================
+   BARISTA - RESTOCK REQUEST INDEX
+======================================== */
 
-/* =========================================================
+.restock-page-barista {
+    width: 100%;
+}
+
+/* ========================================
    PAGE HEADER
-   ========================================================= */
+======================================== */
 
-.page-header {
+.restock-page-barista .page-header {
     display: flex;
-    align-items: flex-end;
+    align-items: flex-start;
     justify-content: space-between;
     gap: 24px;
     margin-bottom: 24px;
 }
 
-.page-header-content {
+.restock-page-barista .page-header-content {
     min-width: 0;
 }
 
-.page-breadcrumb {
+.restock-page-barista .page-breadcrumb {
     display: flex;
     align-items: center;
     gap: 8px;
-    margin-bottom: 10px;
-    color: #8b93a1;
-    font-size: 13px;
+    margin: 0 0 8px;
+    padding: 0;
+    background: transparent;
+    color: #96a0af;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.4;
 }
 
-.page-breadcrumb a {
+.restock-page-barista .page-breadcrumb a {
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    color: #6b7280;
+    gap: 5px;
+    color: #737e8e;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.4;
     text-decoration: none;
 }
 
-.page-breadcrumb a:hover {
-    color: #374151;
+.restock-page-barista .page-breadcrumb a:hover {
+    color: #596474;
 }
 
-.page-breadcrumb > i {
-    font-size: 10px;
-    color: #aeb4bd;
+.restock-page-barista .page-breadcrumb a i {
+    color: #8b95a3;
+    font-size: 13px;
+    line-height: 1;
 }
 
-.page-title {
-    margin: 0;
-    color: #1f2937;
-    font-size: 28px;
+.restock-page-barista .page-breadcrumb > i {
+    color: #b9c0ca;
+    font-size: 9px;
+    line-height: 1;
+}
+
+.restock-page-barista .page-breadcrumb > span {
+    color: #96a0af;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.4;
+}
+
+.restock-page-barista .page-title {
+    margin: 0 0 5px;
+    color: #242424;
+    font-size: 24px;
     font-weight: 700;
+    line-height: 1.35;
 }
 
-.page-subtitle {
-    margin: 6px 0 0;
-    color: #7b8491;
-    font-size: 14px;
+.restock-page-barista .page-subtitle {
+    margin: 0;
+    color: #777777;
+    font-size: 13px;
+    line-height: 1.5;
 }
 
-.page-header-actions {
+.restock-page-barista .page-header-actions {
     flex-shrink: 0;
 }
 
-/* =========================================================
+.restock-page-barista .page-header-actions .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 40px;
+    padding: 9px 15px;
+    border-radius: 8px;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* ========================================
    ALERT
-   ========================================================= */
+======================================== */
 
-.alert {
+.restock-alert {
+    display: flex;
+    align-items: center;
+    gap: 9px;
     margin-bottom: 20px;
-    padding: 13px 16px;
-    border-radius: 9px;
-    font-size: 14px;
+    padding: 11px 14px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    font-size: 13px;
+    line-height: 1.4;
 }
 
-.alert-success {
-    background: #ecfdf5;
-    color: #047857;
+.restock-alert i {
+    flex-shrink: 0;
+    font-size: 15px;
 }
 
-.alert-danger {
-    background: #fef2f2;
-    color: #b91c1c;
+.restock-alert-success {
+    color: #26734d;
+    background: #f0faf5;
+    border-color: #d5f0e1;
 }
 
-/* =========================================================
-   RESTOCK INDEX
-   ========================================================= */
+.restock-alert-danger {
+    color: #b42318;
+    background: #fff5f4;
+    border-color: #f6d8d5;
+}
 
-.restock-table-header {
+/* ========================================
+   CARD
+======================================== */
+
+.restock-card {
+    overflow: visible;
+    background: #ffffff;
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+}
+
+.restock-card-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    gap: 20px;
     padding: 20px 22px;
-    border-bottom: 1px solid #eef0f2;
+    border-bottom: 1px solid #edf0f2;
 }
 
-.restock-table-header h5 {
-    color: #1f2937;
-    font-size: 17px;
-    font-weight: 700;
+.restock-card-header h2 {
+    margin: 0 0 4px;
+    color: #292929;
+    font-size: 16px;
+    font-weight: 650;
+    line-height: 1.4;
 }
 
-.restock-table-header p {
-    font-size: 13px;
+.restock-card-header p {
+    margin: 0;
+    color: #89919c;
+    font-size: 12px;
+    line-height: 1.5;
 }
 
 .restock-total {
-    color: #6b7280;
-    font-size: 13px;
+    display: flex;
+    align-items: baseline;
+    gap: 4px;
+    flex-shrink: 0;
+    color: #8a929d;
+    font-size: 12px;
 }
 
 .restock-total strong {
-    color: #1f2937;
+    color: #30343a;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+/* ========================================
+   TABLE
+======================================== */
+
+.restock-table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: visible;
 }
 
 .restock-table {
+    width: 100%;
     min-width: 850px;
+    margin: 0;
+    border-collapse: separate;
+    border-spacing: 0;
 }
 
 .restock-table thead th {
-    padding: 13px 18px;
-    color: #6b7280;
-    background: #f9fafb;
-    border-bottom: 1px solid #e5e7eb;
-    font-size: 12px;
-    font-weight: 700;
+    padding: 12px 16px;
+    color: #7d8793;
+    background: #fafbfc;
+    border-bottom: 1px solid #edf0f2;
+    font-size: 11px;
+    font-weight: 650;
+    line-height: 1.4;
+    letter-spacing: 0.01em;
+    text-align: left;
     white-space: nowrap;
 }
 
+.restock-table thead th:first-child {
+    padding-left: 22px;
+}
+
+.restock-table thead th:last-child {
+    padding-right: 22px;
+}
+
 .restock-table tbody td {
-    padding: 15px 18px;
-    color: #4b5563;
+    padding: 14px 16px;
+    color: #42474d;
+    background: #ffffff;
     border-bottom: 1px solid #f0f1f3;
     font-size: 13px;
+    vertical-align: middle;
 }
 
 .restock-table tbody tr:last-child td {
     border-bottom: 0;
 }
 
-.restock-table tbody tr:hover {
-    background: #fafafa;
+.restock-table tbody tr:hover td {
+    background: #fcfcfd;
 }
+
+.restock-table .column-number {
+    width: 60px;
+    padding-left: 22px;
+}
+
+.restock-table .column-action {
+    width: 60px;
+    padding-right: 22px;
+    text-align: right;
+}
+
+/* ========================================
+   ROW NUMBER
+======================================== */
 
 .row-number {
-    color: #9ca3af;
-    font-size: 12px;
-}
-
-/* =========================================================
-   ITEM
-   ========================================================= */
-
-.item-info {
-    display: flex;
-    align-items: center;
-    gap: 11px;
-}
-
-.item-icon {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 36px;
-    height: 36px;
-    flex-shrink: 0;
-    color: #4b5563;
-    background: #f3f4f6;
-    border-radius: 8px;
-}
-
-.item-info strong {
-    display: block;
-    color: #1f2937;
-    font-size: 13px;
+    min-width: 26px;
+    height: 26px;
+    padding: 0 6px;
+    color: #78818d;
+    background: #f5f6f7;
+    border-radius: 7px;
+    font-size: 11px;
     font-weight: 600;
 }
 
-.item-info small {
-    display: block;
-    margin-top: 3px;
-    color: #9ca3af;
-    font-size: 11px;
+/* ========================================
+   ITEM
+======================================== */
+
+.restock-item {
+    display: flex;
+    gap: 10px;
 }
+
+/* ========================================
+   CATEGORY
+======================================== */
 
 .category-text {
-    color: #4b5563;
+    color: #68717d;
+    font-size: 12px;
+    font-weight: 500;
 }
 
-.unit-text {
-    margin-left: 3px;
-    color: #9ca3af;
+/* ========================================
+   QUANTITY
+======================================== */
+
+.quantity-info {
+    display: flex;
+    align-items: baseline;
+    gap: 5px;
+    white-space: nowrap;
+}
+
+.quantity-info strong {
+    color: #34383d;
+    font-size: 13px;
+    font-weight: 650;
+}
+
+.quantity-info span {
+    color: #929aa5;
     font-size: 11px;
 }
 
-/* =========================================================
-   STATUS - INDEX
-   ========================================================= */
+/* ========================================
+   STATUS
+======================================== */
 
 .restock-status {
     display: inline-flex;
     align-items: center;
-    gap: 5px;
+    gap: 6px;
+    min-height: 27px;
     padding: 5px 9px;
     border-radius: 20px;
     font-size: 11px;
     font-weight: 600;
+    line-height: 1;
     white-space: nowrap;
 }
 
-.restock-status.status-pending {
-    color: #92400e;
-    background: #fffbeb;
+.restock-status i {
+    font-size: 10px;
 }
 
-.restock-status.status-approved {
-    color: #166534;
-    background: #f0fdf4;
+.status-pending {
+    color: #8a6500;
+    background: #fff8df;
 }
 
-.restock-status.status-rejected {
-    color: #b91c1c;
-    background: #fef2f2;
+.status-approved {
+    color: #27704b;
+    background: #eaf8f0;
 }
 
-.restock-status.status-default {
-    color: #4b5563;
-    background: #f3f4f6;
+.status-rejected {
+    color: #b33a35;
+    background: #fff0ef;
 }
 
-/* =========================================================
+.status-default {
+    color: #68717d;
+    background: #f1f3f5;
+}
+
+/* ========================================
    DATE
-   ========================================================= */
+======================================== */
+
+.date-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    white-space: nowrap;
+}
 
 .date-info strong {
-    display: block;
-    color: #374151;
-    font-size: 13px;
-    font-weight: 500;
+    color: #555d67;
+    font-size: 12px;
+    font-weight: 550;
+    line-height: 1.4;
 }
 
-.date-info small {
-    display: block;
-    margin-top: 3px;
-    color: #9ca3af;
+.date-info span {
+    color: #9aa1aa;
     font-size: 11px;
+    line-height: 1.4;
 }
 
-/* =========================================================
-   ACTION MENU
-   ========================================================= */
-
-.action-menu-wrapper {
-    position: relative;
-    display: inline-block;
-}
+/* ========================================
+   ACTION BUTTON
+======================================== */
 
 .action-button {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 34px;
-    height: 34px;
+    width: 32px;
+    height: 32px;
     padding: 0;
-    color: #4b5563;
-    background: #f3f4f6;
-    border: 0;
+    color: #707985;
+    background: transparent;
+    border: 1px solid transparent;
     border-radius: 7px;
-    text-decoration: none;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition:
+        color 0.15s ease,
+        background 0.15s ease,
+        border-color 0.15s ease;
 }
 
-.action-button:hover {
-    color: #1f2937;
-    background: #e5e7eb;
+.action-button:hover,
+.action-button:focus-visible {
+    color: #343a40;
+    background: #f3f4f6;
+    border-color: #e7e9ec;
+    outline: none;
 }
 
-.action-menu {
-    position: absolute;
-    top: calc(100% + 6px);
-    right: 0;
-    z-index: 100;
-    display: none;
+.action-button i {
+    font-size: 17px;
+}
+
+/* ========================================
+   GLOBAL ACTION MENU
+======================================== */
+
+.global-action-menu {
+    position: fixed;
+    z-index: 1100;
+    display: block;
     min-width: 170px;
     padding: 6px;
-    background: #fff;
-    border: 1px solid #e5e7eb;
+    background: #ffffff;
+    border: 1px solid #e7e9ed;
     border-radius: 9px;
-    box-shadow: 0 8px 24px rgba(15, 23, 42, 0.1);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-4px);
+    transition:
+        opacity 0.15s ease,
+        visibility 0.15s ease,
+        transform 0.15s ease;
 }
 
-.action-menu.show {
-    display: block;
+.global-action-menu.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
 }
 
-.action-menu-item {
+.global-action-menu .action-menu-item {
     display: flex;
     align-items: center;
     width: 100%;
     gap: 9px;
     padding: 9px 10px;
-    color: #374151;
+    color: #4e5660;
     background: transparent;
     border: 0;
-    border-radius: 6px;
-    font-size: 13px;
-    text-decoration: none;
+    border-radius: 7px;
+    font-size: 12px;
+    font-weight: 500;
+    line-height: 1.4;
     text-align: left;
+    text-decoration: none;
     cursor: pointer;
 }
 
-.action-menu-item:hover {
-    color: #1f2937;
-    background: #f3f4f6;
+.global-action-menu .action-menu-item:hover {
+    color: #2f3439;
+    background: #f5f6f8;
 }
 
-.action-menu-item i {
+.global-action-menu .action-menu-item i {
     width: 16px;
+    color: #747d88;
     font-size: 14px;
-}
-
-.action-menu-item.action-menu-danger {
-    color: #dc2626;
-}
-
-.action-menu-item.action-menu-danger:hover {
-    color: #b91c1c;
-    background: #fef2f2;
-}
-
-/* =========================================================
-   EMPTY STATE
-   ========================================================= */
-
-.empty-state {
-    padding: 60px 20px;
     text-align: center;
 }
 
-.empty-state-icon {
+.global-action-menu .action-menu-danger {
+    color: #c03935;
+}
+
+.global-action-menu .action-menu-danger:hover {
+    color: #b42318;
+    background: #fff1f0;
+}
+
+.global-action-menu .action-menu-danger i {
+    color: #c03935;
+}
+
+/* ========================================
+   EMPTY STATE
+======================================== */
+
+.restock-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.restock-empty-icon {
     display: flex;
     align-items: center;
     justify-content: center;
     width: 58px;
     height: 58px;
-    margin: 0 auto 15px;
-    color: #9ca3af;
-    background: #f3f4f6;
-    border-radius: 50%;
+    margin-bottom: 14px;
+    color: #8b949e;
+    background: #f4f5f6;
+    border-radius: 14px;
+}
+
+.restock-empty-icon i {
     font-size: 24px;
 }
 
-.empty-state h5 {
-    margin-bottom: 6px;
-    color: #374151;
-    font-size: 16px;
+.restock-empty h3 {
+    margin: 0 0 6px;
+    color: #3d4248;
+    font-size: 15px;
+    font-weight: 650;
 }
 
-.empty-state p {
-    margin-bottom: 18px;
-    color: #9ca3af;
-    font-size: 13px;
+.restock-empty p {
+    margin: 0 0 18px;
+    color: #9299a2;
+    font-size: 12px;
 }
 
-/* =========================================================
+.restock-empty .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    min-height: 38px;
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+/* ========================================
    PAGINATION
-   ========================================================= */
+======================================== */
 
 .restock-pagination {
     display: flex;
     justify-content: flex-end;
-    padding: 16px 20px;
-    border-top: 1px solid #eef0f2;
+    padding: 16px 22px;
+    border-top: 1px solid #edf0f2;
 }
 
 .restock-pagination nav {
+    margin: 0;
+}
+
+.restock-pagination .pagination {
     display: flex;
-    justify-content: flex-end;
+    align-items: center;
+    gap: 4px;
+    margin: 0;
 }
 
-.restock-pagination svg {
-    width: 16px;
-    height: 16px;
+.restock-pagination .page-item .page-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+    height: 32px;
+    padding: 0 8px;
+    color: #69727d;
+    background: #ffffff;
+    border: 1px solid #e3e6e9;
+    border-radius: 7px;
+    font-size: 12px;
+    box-shadow: none;
 }
 
-/* =========================================================
-   FORM - CREATE / EDIT
-   ========================================================= */
-
-.restock-form {
-    max-width: 760px;
+.restock-pagination .page-item .page-link:hover {
+    color: #343a40;
+    background: #f6f7f8;
+    border-color: #d9dde1;
 }
+
+.restock-pagination .page-item.active .page-link {
+    color: #ffffff;
+    background: #343a40;
+    border-color: #343a40;
+}
+
+.restock-pagination .page-item.disabled .page-link {
+    color: #b4bac1;
+    background: #fafafa;
+    border-color: #e9ebed;
+}
+
+/* ========================================
+   RESPONSIVE
+======================================== */
+
+@media (max-width: 768px) {
+    .restock-page-barista .page-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 16px;
+    }
+
+    .restock-page-barista .page-header-actions {
+        width: 100%;
+    }
+
+    .restock-page-barista .page-header-actions .btn {
+        width: 100%;
+    }
+
+    .restock-card-header {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .restock-total {
+        align-self: flex-start;
+    }
+
+    .restock-table {
+        min-width: 780px;
+    }
+
+    .restock-pagination {
+        justify-content: center;
+        padding: 14px 16px;
+        overflow-x: auto;
+    }
+}
+
+@media (max-width: 480px) {
+    .restock-page-barista .page-title {
+        font-size: 21px;
+    }
+
+    .restock-page-barista .page-subtitle {
+        font-size: 12px;
+    }
+
+    .restock-card-header {
+        padding: 17px 16px;
+    }
+
+    .restock-table thead th {
+        padding: 11px 12px;
+    }
+
+    .restock-table tbody td {
+        padding: 12px;
+    }
+
+    .restock-table .column-number {
+        padding-left: 16px;
+    }
+
+    .restock-table .column-action {
+        padding-right: 16px;
+    }
+
+    .restock-pagination {
+        padding: 14px 12px;
+    }
+}
+
+/* ========================================
+   CREATE - FORM PENGAJUAN RESTOCK
+======================================== */
+
+.restock-form-card {
+    overflow: hidden;
+    background: #ffffff;
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+}
+
+/* ========================================
+   FORM HEADER
+======================================== */
 
 .restock-form-header {
     display: flex;
     align-items: center;
-    gap: 14px;
-    padding-bottom: 20px;
-    margin-bottom: 24px;
-    border-bottom: 1px solid #eef0f2;
+    gap: 13px;
+    padding: 20px 22px;
+    border-bottom: 1px solid #edf0f2;
 }
 
 .restock-form-icon {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 46px;
-    height: 46px;
+    width: 42px;
+    height: 42px;
     flex-shrink: 0;
-    color: #4b5563;
-    background: #f3f4f6;
+    color: #697586;
+    background: #f2f4f6;
     border-radius: 10px;
-    font-size: 20px;
 }
 
-.restock-form-header h5 {
+.restock-form-icon i {
+    font-size: 18px;
+}
+
+.restock-form-header h2 {
     margin: 0 0 4px;
-    color: #1f2937;
-    font-size: 17px;
-    font-weight: 700;
+    color: #292929;
+    font-size: 16px;
+    font-weight: 650;
+    line-height: 1.4;
 }
 
 .restock-form-header p {
     margin: 0;
-    color: #8b93a1;
-    font-size: 13px;
+    color: #89919c;
+    font-size: 12px;
+    line-height: 1.5;
 }
 
-.form-card {
-    padding: 22px;
-    background: #fff;
-    border: 1px solid #e5e7eb;
-    border-radius: 14px;
-}
+/* ========================================
+   VALIDATION ALERT
+======================================== */
 
-.form-group {
+.restock-validation-alert {
     margin-bottom: 20px;
+    padding: 13px 15px;
+    color: #a12b27;
+    background: #fff5f4;
+    border: 1px solid #f3d8d5;
+    border-radius: 8px;
+    font-size: 12px;
 }
 
-.form-group:last-child {
+.restock-validation-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #a12b27;
+}
+
+.restock-validation-header i {
+    font-size: 15px;
+}
+
+.restock-validation-alert ul {
+    margin: 8px 0 0;
+    padding-left: 23px;
+}
+
+.restock-validation-alert li {
+    margin-bottom: 3px;
+    color: #9b4a46;
+    line-height: 1.5;
+}
+
+.restock-validation-alert li:last-child {
     margin-bottom: 0;
 }
 
-.form-group label {
+/* ========================================
+   FORM BODY
+======================================== */
+
+.restock-form-body {
+    padding: 22px;
+}
+
+.restock-form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px 20px;
+}
+
+.restock-form-group {
+    min-width: 0;
+}
+
+.restock-form-group-full {
+    grid-column: 1 / -1;
+}
+
+/* ========================================
+   FORM LABEL
+======================================== */
+
+.restock-form-group label {
     display: block;
-    margin-bottom: 8px;
-    color: #374151;
-    font-size: 14px;
+    margin-bottom: 7px;
+    color: #454b52;
+    font-size: 12px;
     font-weight: 600;
+    line-height: 1.4;
 }
 
-.form-group input,
-.form-group select,
-.form-group textarea {
+.restock-form-group label .required {
+    color: #dc3545;
+}
+
+/* ========================================
+   FORM CONTROL
+======================================== */
+
+.restock-form-group select,
+.restock-form-group input,
+.restock-form-group textarea {
+    display: block;
     width: 100%;
-    box-sizing: border-box;
-    padding: 11px 13px;
-    color: #374151;
-    background: #fff;
-    border: 1px solid #d1d5db;
+    color: #3f454b;
+    background: #ffffff;
+    border: 1px solid #dfe3e7;
     border-radius: 8px;
-    font-size: 14px;
     outline: none;
+    font-size: 13px;
+    transition:
+        border-color 0.15s ease,
+        box-shadow 0.15s ease;
 }
 
-.form-group input:focus,
-.form-group select:focus,
-.form-group textarea:focus {
-    border-color: #111827;
+.restock-form-group select,
+.restock-form-group input {
+    height: 40px;
+    padding: 0 12px;
 }
 
-.form-group textarea {
+.restock-form-group textarea {
+    min-height: 105px;
+    padding: 10px 12px;
     resize: vertical;
+    line-height: 1.5;
 }
 
-.quantity-input {
+.restock-form-group select:focus,
+.restock-form-group input:focus,
+.restock-form-group textarea:focus {
+    border-color: #adb5bd;
+    box-shadow: 0 0 0 3px rgba(108, 117, 125, 0.08);
+}
+
+.restock-form-group select::placeholder,
+.restock-form-group input::placeholder,
+.restock-form-group textarea::placeholder {
+    color: #adb3ba;
+}
+
+/* ========================================
+   INPUT GROUP
+======================================== */
+
+.restock-input-group {
+    display: flex;
+    width: 100%;
+}
+
+.restock-input-group input {
+    min-width: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+.restock-input-group input:focus {
+    position: relative;
+    z-index: 1;
+}
+
+.restock-input-group span {
     display: flex;
     align-items: center;
-    overflow: hidden;
-    background: #fff;
-    border: 1px solid #d1d5db;
-    border-radius: 8px;
-}
-
-.quantity-input input {
-    flex: 1;
-    border: 0;
-    border-radius: 0;
-}
-
-.quantity-input input:focus {
-    border: 0;
-}
-
-.quantity-input span {
-    padding: 0 14px;
-    color: #6b7280;
-    font-size: 14px;
+    justify-content: center;
+    min-width: 76px;
+    padding: 0 12px;
+    color: #737c87;
+    background: #f7f8f9;
+    border: 1px solid #dfe3e7;
+    border-left: 0;
+    border-radius: 0 8px 8px 0;
+    font-size: 12px;
     white-space: nowrap;
 }
 
-.restock-form-info,
-.form-info {
-    display: flex;
-    gap: 12px;
-    padding: 14px 16px;
-    margin-top: 24px;
-    color: #4b5563;
-    background: #f9fafb;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
+/* ========================================
+   FIELD ERROR & HELP
+======================================== */
+
+.restock-field-help {
+    margin-top: 6px;
+    color: #9aa1aa;
+    font-size: 11px;
+    line-height: 1.5;
 }
 
-.restock-form-info > i {
+.restock-field-error {
+    margin-top: 6px;
+    color: #c03935;
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+.restock-form-group select.is-invalid,
+.restock-form-group input.is-invalid,
+.restock-form-group textarea.is-invalid {
+    border-color: #dc3545;
+}
+
+.restock-form-group select.is-invalid:focus,
+.restock-form-group input.is-invalid:focus,
+.restock-form-group textarea.is-invalid:focus {
+    border-color: #dc3545;
+    box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.08);
+}
+
+/* ========================================
+   INFORMATION BOX
+======================================== */
+
+.restock-form-info {
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+    margin-top: 22px;
+    padding: 13px 14px;
+    background: #f7f9fa;
+    border: 1px solid #e8ecef;
+    border-radius: 9px;
+}
+
+.restock-form-info-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     flex-shrink: 0;
-    margin-top: 2px;
-    color: #6b7280;
+    width: 24px;
+    height: 24px;
+    color: #75808b;
+}
+
+.restock-form-info-icon i {
+    font-size: 15px;
 }
 
 .restock-form-info strong {
     display: block;
     margin-bottom: 3px;
-    color: #374151;
-    font-size: 13px;
+    color: #4c545c;
+    font-size: 12px;
+    font-weight: 650;
 }
 
 .restock-form-info p {
     margin: 0;
-    color: #6b7280;
-    font-size: 12px;
-    line-height: 1.6;
+    color: #858e98;
+    font-size: 11px;
+    line-height: 1.55;
 }
 
-.form-info {
-    display: block;
-    line-height: 1.6;
-    font-size: 13px;
-}
+/* ========================================
+   FORM ACTIONS
+======================================== */
 
-.form-actions,
 .restock-form-actions {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    gap: 10px;
-    padding-top: 24px;
-    margin-top: 24px;
-    border-top: 1px solid #eef0f2;
+    gap: 9px;
+    padding: 16px 22px;
+    background: #fafbfc;
+    border-top: 1px solid #edf0f2;
 }
 
-/* =========================================================
-   FORM VALIDATION
-   ========================================================= */
-
-.is-invalid {
-    border-color: #dc2626 !important;
-}
-
-.error-text {
-    display: block;
-    margin-top: 6px;
-    color: #dc2626;
-    font-size: 13px;
-}
-
-/* =========================================================
-   SHOW / DETAIL
-   ========================================================= */
-
-.restock-show,
-.restock-form-page {
-    max-width: 1100px;
-    margin: 0 auto;
-}
-
-.restock-show-header,
-.form-header {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
-    gap: 20px;
-    margin-bottom: 24px;
-}
-
-.restock-show-header h1,
-.form-header h1 {
-    margin: 8px 0 6px;
-    color: #1f2937;
-    font-size: 28px;
-}
-
-.restock-show-header p,
-.form-header p {
-    margin: 0;
-    color: #6b7280;
-}
-
-.back-link {
-    color: #6b7280;
-    font-size: 14px;
-    text-decoration: none;
-}
-
-.back-link:hover {
-    color: #111827;
-}
-
-/* =========================================================
-   STATUS BADGE - SHOW
-   ========================================================= */
-
-.status-badge {
-    display: inline-flex;
-    align-items: center;
-    padding: 7px 12px;
-    border-radius: 999px;
-    font-size: 13px;
-    font-weight: 600;
-}
-
-.status-badge.status-pending {
-    color: #c2410c;
-    background: #fff7ed;
-}
-
-.status-badge.status-approved {
-    color: #047857;
-    background: #ecfdf5;
-}
-
-.status-badge.status-rejected {
-    color: #b91c1c;
-    background: #fef2f2;
-}
-
-/* =========================================================
-   DETAIL CARD
-   ========================================================= */
-
-.restock-detail-grid {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 20px;
-    margin-bottom: 20px;
-}
-
-.detail-card {
-    padding: 22px;
-    margin-bottom: 20px;
-    background: #fff;
-    border: 1px solid #e5e7eb;
-    border-radius: 14px;
-}
-
-.detail-card-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 16px;
-    margin-bottom: 18px;
-}
-
-.detail-card-header h3 {
-    margin: 0;
-    color: #1f2937;
-    font-size: 17px;
-}
-
-.detail-list {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.detail-row {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
-    padding-bottom: 13px;
-    border-bottom: 1px solid #f1f5f9;
-}
-
-.detail-row:last-child {
-    padding-bottom: 0;
-    border-bottom: 0;
-}
-
-.detail-row span {
-    color: #6b7280;
-    font-size: 14px;
-}
-
-.detail-row strong {
-    max-width: 60%;
-    color: #111827;
-    font-size: 14px;
-    text-align: right;
-}
-
-/* =========================================================
-   DETAIL ACTIONS
-   ========================================================= */
-
-.detail-actions {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 10px;
-    margin-top: 20px;
-}
-
-.detail-actions form {
-    margin: 0;
-}
-
-/* =========================================================
-   BUTTONS
-   ========================================================= */
-
-.btn-primary,
-.btn-secondary,
-.btn-danger,
-.btn-edit {
+.restock-form-actions .btn {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-height: 40px;
-    padding: 9px 16px;
-    border: 0;
+    gap: 7px;
+    min-height: 38px;
+    padding: 8px 15px;
     border-radius: 8px;
-    font-size: 14px;
-    font-weight: 600;
-    text-decoration: none;
-    cursor: pointer;
-}
-
-.btn-primary {
-    color: #fff;
-    background: #111827;
-}
-
-.btn-primary:hover {
-    color: #fff;
-    background: #1f2937;
-}
-
-.btn-secondary {
-    color: #374151;
-    background: #f3f4f6;
-}
-
-.btn-secondary:hover {
-    color: #111827;
-    background: #e5e7eb;
-}
-
-.btn-danger {
-    color: #fff;
-    background: #dc2626;
-}
-
-.btn-danger:hover {
-    color: #fff;
-    background: #b91c1c;
-}
-
-.btn-edit {
-    min-height: 36px;
-    padding: 7px 12px;
-    color: #374151;
-    background: #f3f4f6;
-}
-
-.btn-edit:hover {
-    color: #111827;
-    background: #e5e7eb;
-}
-
-/* =========================================================
-   APPROVED / REJECTED INFO
-   ========================================================= */
-
-.approved-info {
-    padding: 13px 15px;
-    margin-top: 18px;
-    color: #047857;
-    background: #ecfdf5;
-    border-radius: 9px;
-    font-size: 14px;
-}
-
-.rejection-box {
-    padding: 15px;
-    margin-top: 18px;
-    background: #fef2f2;
-    border-radius: 9px;
-}
-
-.rejection-box span {
-    display: block;
-    margin-bottom: 7px;
-    color: #991b1b;
-    font-size: 13px;
+    font-size: 12px;
     font-weight: 600;
 }
 
-.rejection-box p {
-    margin: 0;
-    color: #7f1d1d;
-    line-height: 1.6;
+.restock-form-actions .btn-light {
+    color: #68717c;
+    background: #ffffff;
+    border: 1px solid #dfe3e7;
 }
 
-/* =========================================================
-   RESPONSIVE
-   ========================================================= */
+.restock-form-actions .btn-light:hover {
+    color: #3f464d;
+    background: #f5f6f7;
+    border-color: #d5d9dd;
+}
+
+/* ========================================
+   CREATE RESPONSIVE
+======================================== */
 
 @media (max-width: 768px) {
-    .page-header {
-        align-items: flex-start;
-        flex-direction: column;
-    }
-
-    .page-header-actions,
-    .page-header-actions .btn {
-        width: 100%;
-    }
-
-    .page-title {
-        font-size: 23px;
-    }
-
-    .restock-table-header {
-        align-items: flex-start;
-        flex-direction: column;
-        gap: 10px;
-        padding: 17px;
-    }
-
-    .restock-table thead th,
-    .restock-table tbody td {
-        padding: 12px 14px;
-    }
-
-    .restock-pagination {
-        justify-content: center;
-        padding: 14px;
-    }
-
-    .restock-detail-grid {
+    .restock-form-grid {
         grid-template-columns: 1fr;
+        gap: 18px;
     }
 
-    .restock-show-header,
-    .form-header {
-        flex-direction: column;
+    .restock-form-group-full {
+        grid-column: auto;
     }
 
-    .detail-actions,
-    .form-actions,
+    .restock-form-header {
+        padding: 18px 16px;
+    }
+
+    .restock-form-body {
+        padding: 18px 16px;
+    }
+
+    .restock-form-actions {
+        padding: 14px 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .restock-form-header {
+        align-items: flex-start;
+    }
+
+    .restock-form-icon {
+        width: 38px;
+        height: 38px;
+    }
+
+    .restock-form-header h2 {
+        font-size: 15px;
+    }
+
     .restock-form-actions {
         flex-direction: column-reverse;
         align-items: stretch;
-    }
-
-    .detail-actions > *,
-    .form-actions > *,
-    .restock-form-actions > * {
-        width: 100%;
-    }
-
-    .detail-row {
-        align-items: flex-start;
-        flex-direction: column;
-        gap: 5px;
-    }
-
-    .detail-row strong {
-        max-width: 100%;
-        text-align: left;
-    }
-
-    .action-menu {
-        right: 0;
-    }
-}
-
-@media (max-width: 576px) {
-    .restock-form-actions {
-        flex-direction: column-reverse;
     }
 
     .restock-form-actions .btn {
         width: 100%;
     }
 
-    .item-info {
-        min-width: 180px;
+    .restock-form-info {
+        padding: 12px;
+    }
+}
+
+/* ========================================
+   SHOW - DETAIL PENGAJUAN RESTOCK
+======================================== */
+
+.restock-show-status {
+    display: flex;
+    justify-content: flex-end;
+    margin: -8px 0 18px;
+}
+
+.restock-status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 28px;
+    padding: 5px 10px;
+    border-radius: 999px;
+    font-size: 11px;
+    font-weight: 600;
+    line-height: 1;
+}
+
+.restock-status-badge i {
+    font-size: 11px;
+}
+
+.restock-status-badge.status-pending {
+    color: #946c00;
+    background: #fff7dc;
+    border: 1px solid #f2e2a9;
+}
+
+.restock-status-badge.status-approved {
+    color: #287449;
+    background: #edf9f1;
+    border: 1px solid #cdebd8;
+}
+
+.restock-status-badge.status-rejected {
+    color: #a13a35;
+    background: #fff1f0;
+    border: 1px solid #f0d0cd;
+}
+
+.restock-detail-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+}
+
+.restock-detail-card {
+    overflow: hidden;
+    background: #ffffff;
+    border: 1px solid #e9ecef;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+}
+
+.restock-detail-card-full {
+    margin-top: 18px;
+}
+
+.restock-detail-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 18px 20px;
+    border-bottom: 1px solid #edf0f2;
+}
+
+.restock-detail-card-header h2 {
+    margin: 0 0 3px;
+    color: #292929;
+    font-size: 15px;
+    font-weight: 650;
+    line-height: 1.4;
+}
+
+.restock-detail-card-header p {
+    margin: 0;
+    color: #9299a2;
+    font-size: 11px;
+    line-height: 1.5;
+}
+
+.restock-detail-edit {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 32px;
+    padding: 6px 11px;
+    color: #68717c;
+    background: #ffffff;
+    border: 1px solid #dfe3e7;
+    border-radius: 7px;
+    font-size: 11px;
+    font-weight: 600;
+    text-decoration: none;
+    transition:
+        color 0.15s ease,
+        background 0.15s ease,
+        border-color 0.15s ease;
+}
+
+.restock-detail-edit:hover {
+    color: #3f464d;
+    background: #f6f7f8;
+    border-color: #d5d9dd;
+}
+
+.restock-detail-edit i {
+    font-size: 11px;
+}
+
+.restock-detail-list {
+    padding: 4px 20px;
+}
+
+.restock-detail-row {
+    display: grid;
+    grid-template-columns: 140px minmax(0, 1fr);
+    gap: 18px;
+    align-items: start;
+    padding: 13px 0;
+    border-bottom: 1px solid #f0f2f4;
+}
+
+.restock-detail-row:last-child {
+    border-bottom: 0;
+}
+
+.restock-detail-row > span {
+    color: #8b939d;
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 1.5;
+}
+
+.restock-detail-row > strong {
+    min-width: 0;
+    color: #42484e;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+.restock-detail-row-note > strong {
+    font-weight: 500;
+    white-space: pre-line;
+}
+
+.restock-approved-info {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    margin: 0 20px 20px;
+    padding: 13px 14px;
+    color: #376d4b;
+    background: #f1faf4;
+    border: 1px solid #d8edde;
+    border-radius: 8px;
+}
+
+.restock-approved-info > i {
+    flex-shrink: 0;
+    margin-top: 1px;
+    font-size: 14px;
+}
+
+.restock-approved-info strong {
+    display: block;
+    margin-bottom: 3px;
+    color: #356c4a;
+    font-size: 11px;
+    font-weight: 650;
+    line-height: 1.5;
+}
+
+.restock-approved-info p {
+    margin: 0;
+    color: #62806d;
+    font-size: 11px;
+    line-height: 1.55;
+}
+
+.restock-rejection-box {
+    margin: 0 20px 20px;
+    padding: 13px 14px;
+    background: #fff6f5;
+    border: 1px solid #f0d9d6;
+    border-radius: 8px;
+}
+
+.restock-rejection-box > span {
+    display: block;
+    margin-bottom: 5px;
+    color: #a13a35;
+    font-size: 11px;
+    font-weight: 650;
+}
+
+.restock-rejection-box p {
+    margin: 0;
+    color: #80514e;
+    font-size: 11px;
+    line-height: 1.55;
+    white-space: pre-line;
+}
+
+.restock-detail-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 9px;
+    margin-top: 18px;
+}
+
+.restock-detail-actions form {
+    margin: 0;
+}
+
+.restock-detail-actions .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    min-height: 38px;
+    padding: 8px 15px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.restock-detail-actions .btn i {
+    font-size: 13px;
+}
+
+.restock-detail-actions .btn-primary {
+    color: #ffffff;
+}
+
+.restock-detail-actions .btn-danger {
+    color: #ffffff;
+}
+
+@media (max-width: 768px) {
+    .restock-show-status {
+        justify-content: flex-start;
+        margin: -5px 0 16px;
     }
 
-    .restock-table {
-        min-width: 800px;
+    .restock-detail-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+
+    .restock-detail-card-full {
+        margin-top: 16px;
+    }
+
+    .restock-detail-card-header {
+        padding: 17px 16px;
+    }
+
+    .restock-detail-list {
+        padding: 4px 16px;
+    }
+
+    .restock-detail-row {
+        grid-template-columns: 115px minmax(0, 1fr);
+        gap: 12px;
+    }
+
+    .restock-approved-info,
+    .restock-rejection-box {
+        margin-right: 16px;
+        margin-left: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .restock-detail-card-header {
+        align-items: flex-start;
+    }
+
+    .restock-detail-edit span {
+        display: none;
+    }
+
+    .restock-detail-edit {
+        width: 32px;
+        padding: 6px;
+    }
+
+    .restock-detail-row {
+        grid-template-columns: 1fr;
+        gap: 3px;
+        padding: 11px 0;
+    }
+
+    .restock-detail-row > span {
+        font-size: 10px;
+    }
+
+    .restock-detail-row > strong {
+        font-size: 12px;
+    }
+
+    .restock-detail-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .restock-detail-actions form,
+    .restock-detail-actions .btn {
+        width: 100%;
     }
 }

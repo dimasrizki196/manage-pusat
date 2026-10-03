@@ -3,9 +3,8 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\ApproveRestockRequest;
-use App\Http\Requests\Admin\RejectRestockRequest;
-use App\Models\RestockRequest;
+use App\Http\Requests\Admin\RestockRequest\ApproveRestockRequest;
+use App\Http\Requests\Admin\RestockRequest\RejectRestockRequest;
 use App\Services\RestockRequestService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;

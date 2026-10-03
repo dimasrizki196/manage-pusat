@@ -240,9 +240,6 @@ class RestockRequestService
                 );
             }
 
-            /*
-         * 1. Buat ajuan restock terlebih dahulu.
-         */
             $restockRequest = RestockRequest::create([
                 'item_id' => $item->id,
                 'user_id' => $userId,
@@ -251,9 +248,6 @@ class RestockRequestService
                 'status' => 'pending',
             ]);
 
-            /*
-         * 2. Buat activity log untuk ajuan tersebut.
-         */
             $activity = ActivityLog::create([
                 'table_name' => 'restock_requests',
                 'record_id' => $restockRequest->id,
@@ -261,9 +255,6 @@ class RestockRequestService
                 'created_at' => now(),
             ]);
 
-            /*
-         * 3. Hubungkan restock request dengan activity log.
-         */
             $restockRequest->update([
                 'activity_id' => $activity->id,
             ]);
@@ -302,7 +293,6 @@ class RestockRequestService
 
             $item = Item::query()
                 ->with('activity')
-                ->lockForUpdate()
                 ->findOrFail($restockRequest->item_id);
 
             if ($item->isInactive()) {
@@ -310,22 +300,6 @@ class RestockRequestService
                     'Barang sudah nonaktif sehingga ajuan tidak dapat disetujui.'
                 );
             }
-
-            $stockBefore = $item->stock;
-            $stockAfter = $stockBefore + $restockRequest->quantity;
-
-            $item->update([
-                'stock' => $stockAfter,
-            ]);
-
-            $transaction = Transaction::create([
-                'item_id' => $item->id,
-                'user_id' => $adminId,
-                'transaction_type' => 'in',
-                'quantity' => $restockRequest->quantity,
-                'stock_before' => $stockBefore,
-                'stock_after' => $stockAfter,
-            ]);
 
             $restockRequest->update([
                 'status' => 'approved',

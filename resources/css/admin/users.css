@@ -33,15 +33,17 @@
     display: inline-flex;
     align-items: center;
     gap: 7px;
-    border: 1px solid var(--layout-border);
-    color: var(--layout-text);
+    border: 1px solid var(--layout-primary);
+    background: var(--layout-primary);
+    color: #ffffff;
     font-size: 0.74rem;
 }
 
 .users-add-button:hover {
     border-color: transparent;
-    background: var(--layout-primary-soft);
-    color: var(--layout-primary);
+    border-color: var(--layout-primary-dark);
+    background: var(--layout-primary-dark);
+    color: #ffffff;
 }
 
 /* ========================================
@@ -661,7 +663,9 @@
     color: var(--layout-text);
     font-size: 0.76rem;
     outline: none;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
 }
 
 .users-form-group input:focus,
@@ -711,7 +715,9 @@
     background: transparent;
     color: var(--layout-muted);
     cursor: pointer;
-    transition: background-color 0.2s ease, color 0.2s ease;
+    transition:
+        background-color 0.2s ease,
+        color 0.2s ease;
 }
 
 .users-password-toggle:hover {
@@ -745,7 +751,10 @@
     font-weight: 600;
     text-decoration: none;
     cursor: pointer;
-    transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    transition:
+        background-color 0.2s ease,
+        border-color 0.2s ease,
+        color 0.2s ease;
 }
 
 .users-cancel-button {
@@ -950,7 +959,7 @@
     justify-content: space-between;
     gap: 20px;
     min-height: 52px;
-    border-bottom: 1px solid rgba(73, 55, 40, 0.06);
+    border-bottom: 1px solid #4a38290f;
 }
 
 .users-activity-item:last-child {

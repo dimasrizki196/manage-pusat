@@ -2,81 +2,78 @@
 
 @section('title', 'Pengajuan Restock')
 
-@push('styles')
-    @vite('resources/css/barista/restock-requests.css')
-@endpush
-
 @section('content')
-    <div class="page-header">
-        <div class="page-header-content">
-            <div class="page-breadcrumb">
-                <a href="{{ route('barista.dashboard') }}">
-                    <i class="bi bi-grid-1x2"></i>
-                    Dashboard
-                </a>
-                <i class="bi bi-chevron-right"></i>
-                <span>Pengajuan Restock</span>
+    <div class="page-container restock-page-barista">
+        <div class="page-header">
+            <div class="page-header-content">
+                <div class="page-breadcrumb">
+                    <a href="{{ route('barista.dashboard') }}">
+                        <i class="bi bi-grid-1x2"></i>
+                        <span>Dashboard</span>
+                    </a>
+
+                    <i class="bi bi-chevron-right"></i>
+
+                    <span>Pengajuan Restock</span>
+                </div>
+
+                <h1 class="page-title">Pengajuan Restock</h1>
+
+                <p class="page-subtitle">
+                    Kelola dan pantau pengajuan restock barang Anda.
+                </p>
             </div>
 
-            <h1 class="page-title">Pengajuan Restock</h1>
-
-            <p class="page-subtitle">
-                Kelola dan pantau pengajuan restock barang Anda.
-            </p>
+            <div class="page-header-actions">
+                <a href="{{ route('barista.restock-requests.create') }}" class="btn btn-primary">
+                    <i class="bi bi-plus-lg"></i>
+                    <span>Ajukan Restock</span>
+                </a>
+            </div>
         </div>
 
-        <div class="page-header-actions">
-            <a href="{{ route('barista.restock-requests.create') }}" class="btn btn-primary">
-                <i class="bi bi-plus-lg"></i>
-                Ajukan Restock
-            </a>
-        </div>
-    </div>
+        @if (session('success'))
+            <div class="restock-alert restock-alert-success">
+                <i class="bi bi-check-circle-fill"></i>
+                <span>{{ session('success') }}</span>
+            </div>
+        @endif
 
-    @if (session('success'))
-        <div class="alert alert-success d-flex align-items-center gap-2 mb-4">
-            <i class="bi bi-check-circle-fill"></i>
-            <span>{{ session('success') }}</span>
-        </div>
-    @endif
+        @if (session('error'))
+            <div class="restock-alert restock-alert-danger">
+                <i class="bi bi-exclamation-circle-fill"></i>
+                <span>{{ session('error') }}</span>
+            </div>
+        @endif
 
-    @if (session('error'))
-        <div class="alert alert-danger d-flex align-items-center gap-2 mb-4">
-            <i class="bi bi-exclamation-circle-fill"></i>
-            <span>{{ session('error') }}</span>
-        </div>
-    @endif
-
-    <div class="card border-0 shadow-sm">
-        <div class="card-body p-0">
-
-            <div class="restock-table-header">
+        <div class="restock-card">
+            <div class="restock-card-header">
                 <div>
-                    <h5 class="mb-1">Daftar Pengajuan</h5>
+                    <h2>Daftar Pengajuan</h2>
 
-                    <p class="text-muted mb-0">
+                    <p>
                         Riwayat pengajuan restock yang Anda buat.
                     </p>
                 </div>
 
                 <div class="restock-total">
-                    Total:
+                    <span>Total:</span>
                     <strong>{{ $restockRequests->total() }}</strong>
-                    pengajuan
+                    <span>pengajuan</span>
                 </div>
             </div>
 
-            <div class="table-responsive">
-                <table class="table restock-table align-middle mb-0">
+            <div class="restock-table-wrapper">
+                <table class="restock-table">
                     <thead>
                         <tr>
-                            <th width="60">No</th>
+                            <th class="column-number">No</th>
                             <th>Barang</th>
                             <th>Kategori</th>
                             <th>Jumlah</th>
                             <th>Status</th>
                             <th>Diajukan</th>
-                            <th width="80">Aksi</th>
+                            <th class="column-action"></th>
                         </tr>
                     </thead>
 
@@ -111,57 +108,43 @@
                             @endphp
 
                             <tr>
-                                {{-- Nomor --}}
-                                <td>
+                                <td class="column-number">
                                     <span class="row-number">
                                         {{ $restockRequests->firstItem() + $loop->index }}
                                     </span>
                                 </td>
 
-                                {{-- Barang --}}
                                 <td>
-                                    <div class="item-info">
-                                        <div class="item-icon">
-                                            <i class="bi bi-box-seam"></i>
-                                        </div>
-
-                                        <div>
-                                            <strong>
-                                                {{ $request->item?->name ?? '-' }}
-                                            </strong>
-
-                                            <small>
-                                                {{ $request->item?->unit?->name ?? '-' }}
-                                            </small>
-                                        </div>
+                                    <div class="restock-item">
+                                        <strong>
+                                            {{ $request->item?->name ?? '-' }}
+                                        </strong>
                                     </div>
                                 </td>
 
-                                {{-- Kategori --}}
                                 <td>
                                     <span class="category-text">
                                         {{ $request->item?->category?->name ?? '-' }}
                                     </span>
                                 </td>
 
-                                {{-- Jumlah --}}
                                 <td>
-                                    <strong>{{ $quantity }}</strong>
+                                    <div class="quantity-info">
+                                        <strong>{{ $quantity }}</strong>
 
-                                    <span class="unit-text">
-                                        {{ $request->item?->unit?->name ?? '' }}
-                                    </span>
+                                        <span>
+                                            {{ $request->item?->unit?->name ?? '' }}
+                                        </span>
+                                    </div>
                                 </td>
 
-                                {{-- Status --}}
                                 <td>
                                     <span class="restock-status {{ $statusClass }}">
                                         <i class="bi {{ $statusIcon }}"></i>
-                                        {{ $statusLabel }}
+                                        <span>{{ $statusLabel }}</span>
                                     </span>
                                 </td>
 
-                                {{-- Tanggal --}}
                                 <td>
                                     <div class="date-info">
                                         @if ($request->activity?->created_at)
@@ -169,52 +152,23 @@
                                                 {{ $request->activity->created_at->format('d M Y') }}
                                             </strong>
 
-                                            <small>
+                                            <span>
                                                 {{ $request->activity->created_at->format('H:i') }}
-                                            </small>
+                                            </span>
                                         @else
                                             <strong>-</strong>
-                                            <small>-</small>
+                                            <span>-</span>
                                         @endif
                                     </div>
                                 </td>
 
-                                {{-- Aksi --}}
-                                <td>
-                                    <div class="action-menu-wrapper">
-                                        <button type="button" class="action-button action-menu-toggle" title="Aksi"
-                                            aria-label="Aksi" onclick="toggleActionMenu({{ $request->id }})">
-                                            <i class="bi bi-three-dots-vertical"></i>
-                                        </button>
+                                <td class="column-action">
+                                    <button type="button" class="action-button" title="Aksi" aria-label="Aksi"
+                                        data-id="{{ $request->id }}" data-status="{{ $request->status }}"
+                                        onclick="openActionMenu(event, {{ $request->id }})">
+                                        <i class="bi bi-three-dots-vertical"></i>
+                                    </button>
 
-                                        <div class="action-menu" id="action-menu-{{ $request->id }}">
-
-                                            {{-- Lihat Detail --}}
-                                            <a href="{{ route('barista.restock-requests.show', $request->id) }}"
-                                                class="action-menu-item">
-                                                <i class="bi bi-eye"></i>
-                                                <span>Lihat Detail</span>
-                                            </a>
-
-                                            {{-- Edit hanya Pending --}}
-                                            @if ($request->status === 'pending')
-                                                <a href="{{ route('barista.restock-requests.edit', $request->id) }}"
-                                                    class="action-menu-item">
-                                                    <i class="bi bi-pencil"></i>
-                                                    <span>Edit</span>
-                                                </a>
-
-                                                {{-- Hapus hanya Pending --}}
-                                                <button type="button" class="action-menu-item action-menu-danger"
-                                                    onclick="confirmDelete({{ $request->id }})">
-                                                    <i class="bi bi-trash"></i>
-                                                    <span>Hapus</span>
-                                                </button>
-                                            @endif
-                                        </div>
-                                    </div>
-
-                                    {{-- Form delete --}}
                                     @if ($request->status === 'pending')
                                         <form id="delete-form-{{ $request->id }}"
                                             action="{{ route('barista.restock-requests.destroy', $request->id) }}"
@@ -228,12 +182,12 @@
                         @empty
                             <tr>
                                 <td colspan="7">
-                                    <div class="empty-state">
-                                        <div class="empty-state-icon">
+                                    <div class="restock-empty">
+                                        <div class="restock-empty-icon">
                                             <i class="bi bi-clipboard-x"></i>
                                         </div>
 
-                                        <h5>Belum Ada Pengajuan</h5>
+                                        <h3>Belum Ada Pengajuan</h3>
 
                                         <p>
                                             Anda belum memiliki pengajuan restock.
@@ -241,7 +195,7 @@
 
                                         <a href="{{ route('barista.restock-requests.create') }}" class="btn btn-primary">
                                             <i class="bi bi-plus-lg"></i>
-                                            Ajukan Restock
+                                            <span>Ajukan Restock</span>
                                         </a>
                                     </div>
                                 </td>
@@ -251,7 +205,6 @@
                 </table>
             </div>
 
-            {{-- Pagination --}}
             @if ($restockRequests->hasPages())
                 <div class="restock-pagination">
                     {{ $restockRequests->links() }}
@@ -260,23 +213,89 @@
         </div>
     </div>
 
+    {{-- Global action menu --}}
+    <div id="global-action-menu" class="global-action-menu" aria-hidden="true">
+        <a id="global-action-detail" href="#" class="action-menu-item">
+            <i class="bi bi-eye"></i>
+            <span>Lihat Detail</span>
+        </a>
+
+        <a id="global-action-edit" href="#" class="action-menu-item">
+            <i class="bi bi-pencil"></i>
+            <span>Edit</span>
+        </a>
+
+        <button type="button" id="global-action-delete" class="action-menu-item action-menu-danger">
+            <i class="bi bi-trash"></i>
+            <span>Hapus</span>
+        </button>
+    </div>
+
     <script>
-        function toggleActionMenu(id) {
-            const currentMenu = document.getElementById(`action-menu-${id}`);
+        const globalActionMenu = document.getElementById('global-action-menu');
+        const globalActionDetail = document.getElementById('global-action-detail');
+        const globalActionEdit = document.getElementById('global-action-edit');
+        const globalActionDelete = document.getElementById('global-action-delete');
 
-            document.querySelectorAll('.action-menu').forEach(menu => {
-                if (menu !== currentMenu) {
-                    menu.classList.remove('show');
-                }
-            });
+        function openActionMenu(event, id) {
+            event.stopPropagation();
 
-            currentMenu.classList.toggle('show');
+            const button = event.currentTarget;
+            const status = button.dataset.status;
+            const rect = button.getBoundingClientRect();
+
+            globalActionDetail.href =
+                "{{ url('/barista/restock-requests') }}/" + id;
+
+            globalActionEdit.href =
+                "{{ url('/barista/restock-requests') }}/" + id + "/edit";
+
+            globalActionEdit.style.display =
+                status === 'pending' ? 'flex' : 'none';
+
+            globalActionDelete.style.display =
+                status === 'pending' ? 'flex' : 'none';
+
+            globalActionDelete.onclick = function() {
+                confirmDelete(id);
+            };
+
+            globalActionMenu.classList.add('show');
+            globalActionMenu.setAttribute('aria-hidden', 'false');
+
+            const menuWidth = globalActionMenu.offsetWidth;
+            const menuHeight = globalActionMenu.offsetHeight;
+
+            let left = rect.right - menuWidth;
+            let top = rect.bottom + 6;
+
+            if (left < 8) {
+                left = 8;
+            }
+
+            if (left + menuWidth > window.innerWidth - 8) {
+                left = window.innerWidth - menuWidth - 8;
+            }
+
+            if (top + menuHeight > window.innerHeight - 8) {
+                top = rect.top - menuHeight - 6;
+            }
+
+            if (top < 8) {
+                top = 8;
+            }
+
+            globalActionMenu.style.left = `${left}px`;
+            globalActionMenu.style.top = `${top}px`;
+        }
+
+        function closeActionMenu() {
+            globalActionMenu.classList.remove('show');
+            globalActionMenu.setAttribute('aria-hidden', 'true');
         }
 
         function confirmDelete(id) {
-            document.querySelectorAll('.action-menu').forEach(menu => {
-                menu.classList.remove('show');
-            });
+            closeActionMenu();
 
             const confirmed = confirm(
                 'Hapus ajuan restock ini?\n\n' +
@@ -284,16 +303,24 @@
             );
 
             if (confirmed) {
-                document.getElementById(`delete-form-${id}`).submit();
+                const form = document.getElementById(`delete-form-${id}`);
+
+                if (form) {
+                    form.submit();
+                }
             }
         }
 
         document.addEventListener('click', function(event) {
-            if (!event.target.closest('.action-menu-wrapper')) {
-                document.querySelectorAll('.action-menu').forEach(menu => {
-                    menu.classList.remove('show');
-                });
+            if (
+                !event.target.closest('.action-button') &&
+                !event.target.closest('.global-action-menu')
+            ) {
+                closeActionMenu();
             }
         });
+
+        window.addEventListener('scroll', closeActionMenu);
+        window.addEventListener('resize', closeActionMenu);
     </script>
 @endsection

@@ -138,21 +138,15 @@ class ItemService
         });
     }
 
-    public function restore(
-        Item $item,
-        int $userId
-    ): Item {
+    public function restore(Item $item, int $userId): Item
+    {
         return DB::transaction(function () use ($item, $userId) {
-            $item->restore();
-
-            $this->activityLogService->restore(
-                $item,
-                $userId
-            );
+            $this->activityLogService->restore($item, $userId);
 
             return $item->fresh([
                 'category',
                 'unit',
+                'activity',
             ]);
         });
     }

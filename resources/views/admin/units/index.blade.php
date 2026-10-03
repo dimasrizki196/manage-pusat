@@ -2,22 +2,38 @@
 
 @section('title', 'Master Unit')
 
-@section('content')
+@push('styles')
+    @vite('resources/css/admin/master.css')
+@endpush
 
+@section('content')
     <div class="admin-master-page">
-        {{-- HEADER --}}
         <div class="master-page-header">
-            <div>
+            <div class="master-page-header-content">
+                <div class="master-breadcrumb">
+                    <a href="{{ route('admin.dashboard') }}">
+                        <i class="bi bi-grid"></i>
+                        <span>Dashboard</span>
+                    </a>
+                    <i class="bi bi-chevron-right"></i>
+                    <span>Master Unit</span>
+                </div>
+
                 <h1 class="master-page-title">Master Unit</h1>
-                <p class="master-page-subtitle">Kelola satuan yang digunakan pada barang.</p>
+                <p class="master-page-subtitle">
+                    Kelola satuan yang digunakan pada barang.
+                </p>
             </div>
-            <button type="button" class="master-primary-button" data-bs-toggle="modal" data-bs-target="#createUnitModal">
-                <i class="bi bi-plus-lg"></i>
-                Tambah Unit
-            </button>
+
+            <div class="master-page-header-actions">
+                <button type="button" class="master-primary-button" data-bs-toggle="modal"
+                    data-bs-target="#createUnitModal">
+                    <i class="bi bi-plus-lg"></i>
+                    <span>Tambah Unit</span>
+                </button>
+            </div>
         </div>
 
-        {{-- ALERT --}}
         @if (session('success'))
             <div class="master-alert master-alert-success">
                 <i class="bi bi-check-circle-fill"></i>
@@ -35,6 +51,7 @@
         @if ($errors->any())
             <div class="master-alert master-alert-danger">
                 <i class="bi bi-exclamation-circle-fill"></i>
+
                 <div>
                     @foreach ($errors->all() as $error)
                         <div>{{ $error }}</div>
@@ -43,13 +60,16 @@
             </div>
         @endif
 
-        {{-- TABLE --}}
         <div class="master-card">
             <div class="master-card-header">
                 <div>
                     <h2>Daftar Unit</h2>
-                    <span>{{ $units->total() }} unit</span>
+                    <p>Daftar satuan yang tersedia untuk barang.</p>
                 </div>
+
+                <span class="master-card-total">
+                    Total: {{ $units->total() }} unit
+                </span>
             </div>
 
             <div class="master-table-wrapper">
@@ -58,42 +78,52 @@
                         <tr>
                             <th width="70">No</th>
                             <th>Nama Unit</th>
-                            <th width="90">Aksi</th>
+                            <th width="70">Aksi</th>
                         </tr>
                     </thead>
+
                     <tbody>
-                        @forelse($units as $index => $unit)
+                        @forelse ($units as $index => $unit)
                             <tr>
-                                <td>{{ $units->firstItem() + $index }}</td>
                                 <td>
-                                    <span class="master-name">{{ $unit->name }}</span>
+                                    <span class="master-number">
+                                        {{ $units->firstItem() + $index }}
+                                    </span>
                                 </td>
+
                                 <td>
-                                    <div class="master-action-wrapper">
-                                        <button type="button" class="master-action-button"
-                                            onclick="toggleUnitActionMenu({{ $unit->id }})" aria-label="Aksi unit">
-                                            <i class="bi bi-three-dots-vertical"></i>
-                                        </button>
-                                        <div id="unitActionMenu-{{ $unit->id }}" class="master-action-menu">
-                                            <button type="button"
-                                                onclick="openEditUnitModal({{ $unit->id }}, @js($unit->name))">
-                                                <i class="bi bi-pencil"></i>
-                                                Edit
-                                            </button>
-                                            <button type="button" class="danger"
-                                                onclick="confirmDeleteUnit({{ $unit->id }}, @js($unit->name))">
-                                                <i class="bi bi-trash3"></i>
-                                                Hapus
-                                            </button>
-                                        </div>
-                                    </div>
+                                    <span class="master-name">
+                                        {{ $unit->name }}
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <button type="button" class="master-action-button js-unit-action"
+                                        data-unit-id="{{ $unit->id }}" aria-label="Aksi unit" aria-expanded="false">
+                                        <i class="bi bi-three-dots-vertical"></i>
+                                    </button>
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="3" class="master-empty">
-                                    <i class="bi bi-box"></i>
-                                    <span>Belum ada data unit.</span>
+                                <td colspan="3">
+                                    <div class="master-empty">
+                                        <div class="master-empty-icon">
+                                            <i class="bi bi-rulers"></i>
+                                        </div>
+
+                                        <strong>Belum ada data unit</strong>
+
+                                        <span>
+                                            Tambahkan unit untuk digunakan pada data barang.
+                                        </span>
+
+                                        <button type="button" class="master-primary-button master-empty-button"
+                                            data-bs-toggle="modal" data-bs-target="#createUnitModal">
+                                            <i class="bi bi-plus-lg"></i>
+                                            Tambah Unit
+                                        </button>
+                                    </div>
                                 </td>
                             </tr>
                         @endforelse
@@ -101,18 +131,28 @@
                 </table>
             </div>
 
-            {{-- PAGINATION --}}
             @if ($units->hasPages())
                 <div class="master-pagination">
                     {{ $units->links() }}
                 </div>
             @endif
         </div>
+    </div>
 
+    {{-- GLOBAL ACTION MENU --}}
+    <div id="unitActionMenu" class="master-global-action-menu" hidden>
+        <button type="button" id="unitActionEdit">
+            <i class="bi bi-pencil"></i>
+            <span>Edit</span>
+        </button>
+
+        <button type="button" id="unitActionDelete" class="danger">
+            <i class="bi bi-trash3"></i>
+            <span>Hapus</span>
+        </button>
     </div>
 
     {{-- CREATE MODAL --}}
-
     <div class="modal fade" id="createUnitModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content master-modal">
@@ -121,18 +161,27 @@
                         <h5 class="modal-title">Tambah Unit</h5>
                         <p>Tambahkan unit baru.</p>
                     </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
                 </div>
 
                 <form action="{{ route('admin.units.store') }}" method="POST">
                     @csrf
+
                     <div class="modal-body">
-                        <label for="create_unit_name" class="master-form-label">Nama Unit</label>
+                        <label for="create_unit_name" class="master-form-label">
+                            Nama Unit
+                        </label>
+
                         <input type="text" id="create_unit_name" name="name" class="master-form-input"
-                            placeholder="Contoh: Kg" value="{{ old('name') }}" required>
+                            placeholder="Contoh: Kg" value="{{ old('name') }}" required autocomplete="off">
                     </div>
+
                     <div class="modal-footer">
-                        <button type="button" class="master-secondary-button" data-bs-dismiss="modal">Batal</button>
+                        <button type="button" class="master-secondary-button" data-bs-dismiss="modal">
+                            Batal
+                        </button>
+
                         <button type="submit" class="master-primary-button">
                             <i class="bi bi-check2"></i>
                             Simpan
@@ -141,11 +190,9 @@
                 </form>
             </div>
         </div>
-
     </div>
 
     {{-- EDIT MODAL --}}
-
     <div class="modal fade" id="editUnitModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content master-modal">
@@ -154,18 +201,28 @@
                         <h5 class="modal-title">Edit Unit</h5>
                         <p>Perbarui informasi unit.</p>
                     </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
                 </div>
 
                 <form id="editUnitForm" method="POST">
                     @csrf
                     @method('PUT')
+
                     <div class="modal-body">
-                        <label for="edit_unit_name" class="master-form-label">Nama Unit</label>
-                        <input type="text" id="edit_unit_name" name="name" class="master-form-input" required>
+                        <label for="edit_unit_name" class="master-form-label">
+                            Nama Unit
+                        </label>
+
+                        <input type="text" id="edit_unit_name" name="name" class="master-form-input" required
+                            autocomplete="off">
                     </div>
+
                     <div class="modal-footer">
-                        <button type="button" class="master-secondary-button" data-bs-dismiss="modal">Batal</button>
+                        <button type="button" class="master-secondary-button" data-bs-dismiss="modal">
+                            Batal
+                        </button>
+
                         <button type="submit" class="master-primary-button">
                             <i class="bi bi-check2"></i>
                             Simpan Perubahan
@@ -174,24 +231,32 @@
                 </form>
             </div>
         </div>
-
     </div>
 
     {{-- DELETE CONFIRMATION --}}
-
     <div class="modal fade" id="deleteUnitModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content master-confirm-modal">
                 <div class="master-confirm-icon danger">
                     <i class="bi bi-trash3"></i>
                 </div>
+
                 <h5>Hapus Unit?</h5>
-                <p>Anda yakin ingin menghapus <strong id="deleteUnitName"></strong>?</p>
+
+                <p>
+                    Anda yakin ingin menghapus
+                    <strong id="deleteUnitName"></strong>?
+                </p>
+
                 <div class="master-confirm-actions">
-                    <button type="button" class="master-secondary-button" data-bs-dismiss="modal">Batal</button>
+                    <button type="button" class="master-secondary-button" data-bs-dismiss="modal">
+                        Batal
+                    </button>
+
                     <form id="deleteUnitForm" method="POST">
                         @csrf
                         @method('DELETE')
+
                         <button type="submit" class="master-danger-button">
                             <i class="bi bi-trash3"></i>
                             Ya, Hapus
@@ -205,66 +270,198 @@
 
 @push('scripts')
     <script>
-        const unitUpdateUrl = @json(route('admin.units.update', ['unit' => '__UNIT_ID__']));
-        const unitDeleteUrl = @json(route('admin.units.destroy', ['unit' => '__UNIT_ID__']));
+        document.addEventListener('DOMContentLoaded', function() {
+            const actionMenu = document.getElementById('unitActionMenu');
+            const actionEdit = document.getElementById('unitActionEdit');
+            const actionDelete = document.getElementById('unitActionDelete');
 
-        function buildUnitUrl(template, id) {
-            return template.replace('__UNIT_ID__', id);
-        }
+            const editModalElement = document.getElementById('editUnitModal');
+            const deleteModalElement = document.getElementById('deleteUnitModal');
 
-        function closeUnitActionMenus() {
-            document.querySelectorAll('.master-action-menu').forEach(function(menu) {
-                menu.classList.remove('show');
-            });
-        }
+            const editForm = document.getElementById('editUnitForm');
+            const editInput = document.getElementById('edit_unit_name');
 
-        function toggleUnitActionMenu(id) {
-            const menu = document.getElementById('unitActionMenu-' + id);
-            if (!menu) return;
+            const deleteForm = document.getElementById('deleteUnitForm');
+            const deleteName = document.getElementById('deleteUnitName');
 
-            const isOpen = menu.classList.contains('show');
-            closeUnitActionMenus();
+            const unitUpdateUrl = @json(route('admin.units.update', ['unit' => '__UNIT_ID__']));
 
-            if (!isOpen) {
-                menu.classList.add('show');
+            const unitDeleteUrl = @json(route('admin.units.destroy', ['unit' => '__UNIT_ID__']));
+
+            let activeButton = null;
+            let activeUnit = null;
+
+            function buildUnitUrl(template, id) {
+                return template.replace('__UNIT_ID__', id);
             }
-        }
 
-        function openEditUnitModal(id, name) {
-            closeUnitActionMenus();
+            function closeActionMenu() {
+                if (!actionMenu) {
+                    return;
+                }
 
-            const form = document.getElementById('editUnitForm');
-            const input = document.getElementById('edit_unit_name');
+                actionMenu.hidden = true;
 
-            if (!form || !input) return;
+                if (activeButton) {
+                    activeButton.setAttribute('aria-expanded', 'false');
+                }
 
-            form.action = buildUnitUrl(unitUpdateUrl, id);
-            input.value = name;
+                activeButton = null;
+                activeUnit = null;
+            }
 
-            const modalElement = document.getElementById('editUnitModal');
-            const modal = bootstrap.Modal.getOrCreateInstance(modalElement);
-            modal.show();
-        }
+            function positionActionMenu(button) {
+                if (!actionMenu || !button) {
+                    return;
+                }
 
-        function confirmDeleteUnit(id, name) {
-            closeUnitActionMenus();
+                actionMenu.hidden = false;
 
-            const form = document.getElementById('deleteUnitForm');
-            const nameElement = document.getElementById('deleteUnitName');
+                const buttonRect = button.getBoundingClientRect();
+                const menuRect = actionMenu.getBoundingClientRect();
 
-            if (!form || !nameElement) return;
+                let top = buttonRect.bottom + 6;
+                let left = buttonRect.right - menuRect.width;
 
-            form.action = buildUnitUrl(unitDeleteUrl, id);
-            nameElement.textContent = name;
+                const padding = 10;
 
-            const modalElement = document.getElementById('deleteUnitModal');
-            const modal = bootstrap.Modal.getOrCreateInstance(modalElement);
-            modal.show();
-        }
+                if (left < padding) {
+                    left = padding;
+                }
 
-        document.addEventListener('click', function(event) {
-            if (!event.target.closest('.master-action-wrapper')) {
-                closeUnitActionMenus();
+                if (left + menuRect.width > window.innerWidth - padding) {
+                    left = window.innerWidth - menuRect.width - padding;
+                }
+
+                if (top + menuRect.height > window.innerHeight - padding) {
+                    top = buttonRect.top - menuRect.height - 6;
+                }
+
+                if (top < padding) {
+                    top = padding;
+                }
+
+                actionMenu.style.top = top + 'px';
+                actionMenu.style.left = left + 'px';
+            }
+
+            function openActionMenu(button) {
+                const unitId = button.dataset.unitId;
+
+                if (!unitId) {
+                    return;
+                }
+
+                if (
+                    activeButton === button &&
+                    !actionMenu.hidden
+                ) {
+                    closeActionMenu();
+                    return;
+                }
+
+                closeActionMenu();
+
+                activeButton = button;
+                activeUnit = {
+                    id: unitId,
+                    name: button
+                        .closest('tr')
+                        ?.querySelector('.master-name')
+                        ?.textContent
+                        .trim() || ''
+                };
+
+                button.setAttribute('aria-expanded', 'true');
+
+                positionActionMenu(button);
+            }
+
+            document
+                .querySelectorAll('.js-unit-action')
+                .forEach(function(button) {
+                    button.addEventListener('click', function(event) {
+                        event.stopPropagation();
+                        openActionMenu(this);
+                    });
+                });
+
+            actionEdit?.addEventListener('click', function() {
+                if (!activeUnit || !editForm || !editInput) {
+                    return;
+                }
+
+                editForm.action = buildUnitUrl(
+                    unitUpdateUrl,
+                    activeUnit.id
+                );
+
+                editInput.value = activeUnit.name;
+
+                closeActionMenu();
+
+                const modal = bootstrap.Modal.getOrCreateInstance(
+                    editModalElement
+                );
+
+                modal.show();
+
+                setTimeout(function() {
+                    editInput.focus();
+                    editInput.select();
+                }, 300);
+            });
+
+            actionDelete?.addEventListener('click', function() {
+                if (!activeUnit || !deleteForm || !deleteName) {
+                    return;
+                }
+
+                deleteForm.action = buildUnitUrl(
+                    unitDeleteUrl,
+                    activeUnit.id
+                );
+
+                deleteName.textContent = activeUnit.name;
+
+                closeActionMenu();
+
+                const modal = bootstrap.Modal.getOrCreateInstance(
+                    deleteModalElement
+                );
+
+                modal.show();
+            });
+
+            document.addEventListener('click', function(event) {
+                if (
+                    !event.target.closest('.js-unit-action') &&
+                    !event.target.closest('#unitActionMenu')
+                ) {
+                    closeActionMenu();
+                }
+            });
+
+            window.addEventListener('resize', function() {
+                if (activeButton && !actionMenu.hidden) {
+                    positionActionMenu(activeButton);
+                }
+            });
+
+            window.addEventListener('scroll', function() {
+                if (activeButton && !actionMenu.hidden) {
+                    positionActionMenu(activeButton);
+                }
+            }, true);
+
+            const createModal = document.getElementById('createUnitModal');
+
+            if (createModal) {
+                createModal.addEventListener('shown.bs.modal', function() {
+                    document
+                        .getElementById('create_unit_name')
+                        ?.focus();
+                });
             }
         });
     </script>

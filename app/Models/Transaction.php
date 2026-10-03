@@ -15,6 +15,8 @@ class Transaction extends Model
         'item_id',
         'user_id',
         'transaction_type',
+        'transaction_source',
+        'restock_request_id',
         'quantity',
         'stock_before',
         'stock_after',
@@ -35,6 +37,11 @@ class Transaction extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function restockRequest(): BelongsTo
+    {
+        return $this->belongsTo(RestockRequest::class);
     }
 
     public function activity(): BelongsTo

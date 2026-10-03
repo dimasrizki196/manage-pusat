@@ -8,18 +8,25 @@
 
 @section('content')
     <div class="restock-page">
-
-        <div class="page-header">
-            <div class="page-header-content">
-                <h1 class="page-title">Ajuan Restock</h1>
-                <p class="page-subtitle">
+        <div class="restock-page-header">
+            <div class="restock-page-header-content">
+                <div class="restock-breadcrumb">
+                    <a href="{{ route('admin.dashboard') }}">
+                        <i class="bi bi-grid"></i>
+                        <span>Dashboard</span>
+                    </a>
+                    <i class="bi bi-chevron-right"></i>
+                    <span>Ajuan Restock</span>
+                </div>
+                <h1 class="restock-page-title">Ajuan Restock</h1>
+                <p class="restock-page-subtitle">
                     Kelola pengajuan restock barang dari barista.
                 </p>
             </div>
         </div>
 
         @if (session('success'))
-            <div class="alert alert-success">
+            <div class="restock-alert restock-alert-success">
                 <i class="bi bi-check-circle-fill"></i>
                 <span>{{ session('success') }}</span>
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
@@ -27,7 +34,7 @@
         @endif
 
         @if (session('error'))
-            <div class="alert alert-danger">
+            <div class="restock-alert restock-alert-danger">
                 <i class="bi bi-exclamation-circle-fill"></i>
                 <span>{{ session('error') }}</span>
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
@@ -35,10 +42,8 @@
         @endif
 
         <div class="restock-card">
-
             <div class="restock-filter">
                 <form method="GET" action="{{ route('admin.restock-requests.index') }}" class="restock-filter-form">
-
                     <div class="restock-search">
                         <i class="bi bi-search"></i>
                         <input type="text" name="search" value="{{ request('search') }}"
@@ -47,19 +52,15 @@
 
                     <select name="status" class="restock-filter-select">
                         <option value="">Semua Status</option>
-
                         <option value="pending" @selected(request('status') === 'pending')>
                             Menunggu
                         </option>
-
                         <option value="approved" @selected(request('status') === 'approved')>
                             Disetujui
                         </option>
-
                         <option value="rejected" @selected(request('status') === 'rejected')>
                             Ditolak
                         </option>
-
                         <option value="deleted" @selected(request('status') === 'deleted')>
                             Dihapus
                         </option>
@@ -76,14 +77,13 @@
                             Reset
                         </a>
                     @endif
-
                 </form>
             </div>
 
             <div class="restock-card-header">
                 <div>
-                    <h5>Daftar Ajuan Restock</h5>
-                    <span>{{ $restockRequests->total() }} pengajuan</span>
+                    <h2>Daftar Ajuan Restock</h2>
+                    <p>{{ $restockRequests->total() }} pengajuan</p>
                 </div>
             </div>
 
@@ -100,33 +100,33 @@
                             <th width="65">AKSI</th>
                         </tr>
                     </thead>
-
                     <tbody>
                         @forelse ($restockRequests as $request)
-
                             @php
                                 $isDeleted = $request->activity?->deleted_at !== null;
-
                                 $quantity = rtrim(rtrim(number_format($request->quantity, 2, ',', '.'), '0'), ',');
                             @endphp
 
                             <tr class="{{ $isDeleted ? 'restock-row-deleted' : '' }}">
-
-                                <td>
+                                <td class="restock-number">
                                     {{ $restockRequests->firstItem() + $loop->index }}
                                 </td>
 
                                 <td>
                                     <div class="restock-item">
-                                        <strong>
-                                            {{ $request->item?->name ?? '-' }}
-                                        </strong>
-
-                                        <span>
-                                            {{ $request->item?->category?->name ?? '-' }}
-                                            ·
-                                            {{ $request->item?->unit?->name ?? '-' }}
-                                        </span>
+                                        <div class="restock-item-icon">
+                                            <i class="bi bi-box-seam"></i>
+                                        </div>
+                                        <div class="restock-item-content">
+                                            <strong>
+                                                {{ $request->item?->name ?? '-' }}
+                                            </strong>
+                                            <span>
+                                                {{ $request->item?->category?->name ?? '-' }}
+                                                <span class="restock-dot">·</span>
+                                                {{ $request->item?->unit?->name ?? '-' }}
+                                            </span>
+                                        </div>
                                     </div>
                                 </td>
 
@@ -135,7 +135,6 @@
                                         <div class="restock-avatar">
                                             {{ strtoupper(substr($request->user?->name ?? '-', 0, 1)) }}
                                         </div>
-
                                         <span>
                                             {{ $request->user?->name ?? '-' }}
                                         </span>
@@ -143,22 +142,26 @@
                                 </td>
 
                                 <td>
-                                    <strong>{{ $quantity }}</strong>
-
-                                    <span class="restock-unit">
-                                        {{ $request->item?->unit?->name ?? '' }}
-                                    </span>
+                                    <div class="restock-quantity">
+                                        <strong>{{ $quantity }}</strong>
+                                        <span>
+                                            {{ $request->item?->unit?->name ?? '' }}
+                                        </span>
+                                    </div>
                                 </td>
 
                                 <td>
                                     @if ($request->activity?->created_at)
-                                        {{ $request->activity->created_at->format('d-m-Y') }}
-
-                                        <small class="restock-time">
-                                            {{ $request->activity->created_at->format('H:i') }}
-                                        </small>
+                                        <div class="restock-date">
+                                            <strong>
+                                                {{ $request->activity->created_at->format('d-m-Y') }}
+                                            </strong>
+                                            <span>
+                                                {{ $request->activity->created_at->format('H:i') }}
+                                            </span>
+                                        </div>
                                     @else
-                                        -
+                                        <span class="restock-muted">-</span>
                                     @endif
                                 </td>
 
@@ -192,14 +195,12 @@
 
                                 <td>
                                     <div class="restock-action-wrapper">
-
                                         <button type="button" class="restock-action-button"
                                             onclick="openRestockActionMenu(this)" aria-label="Menu aksi">
                                             <i class="bi bi-three-dots"></i>
                                         </button>
 
                                         <div class="restock-action-menu">
-
                                             <a href="{{ route('admin.restock-requests.show', $request->id) }}">
                                                 <i class="bi bi-eye"></i>
                                                 Lihat Detail
@@ -208,20 +209,20 @@
                                             @if ($isDeleted)
                                                 <button type="button" class="action-success"
                                                     onclick="confirmRestockAction(
-                                                        '{{ route('admin.restock-requests.restore', $request->id) }}',
-                                                        {{ Js::from($request->item?->name ?? '-') }},
-                                                        'restore'
-                                                    )">
+                                                    '{{ route('admin.restock-requests.restore', $request->id) }}',
+                                                    {{ Js::from($request->item?->name ?? '-') }},
+                                                    'restore'
+                                                )">
                                                     <i class="bi bi-arrow-counterclockwise"></i>
                                                     Pulihkan
                                                 </button>
 
                                                 <button type="button" class="action-danger"
                                                     onclick="confirmRestockAction(
-                                                        '{{ route('admin.restock-requests.force-destroy', $request->id) }}',
-                                                        {{ Js::from($request->item?->name ?? '-') }},
-                                                        'force-delete'
-                                                    )">
+                                                    '{{ route('admin.restock-requests.force-destroy', $request->id) }}',
+                                                    {{ Js::from($request->item?->name ?? '-') }},
+                                                    'force-delete'
+                                                )">
                                                     <i class="bi bi-trash3"></i>
                                                     Hapus Permanen
                                                 </button>
@@ -229,19 +230,19 @@
                                                 @if ($request->status === 'pending')
                                                     <button type="button" class="action-success"
                                                         onclick="confirmRestockAction(
-                                                            '{{ route('admin.restock-requests.approve', $request->id) }}',
-                                                            {{ Js::from($request->item?->name ?? '-') }},
-                                                            'approve'
-                                                        )">
+                                                        '{{ route('admin.restock-requests.approve', $request->id) }}',
+                                                        {{ Js::from($request->item?->name ?? '-') }},
+                                                        'approve'
+                                                    )">
                                                         <i class="bi bi-check-circle"></i>
                                                         Setujui
                                                     </button>
 
                                                     <button type="button" class="action-warning"
                                                         onclick="openRejectModal(
-                                                            '{{ route('admin.restock-requests.reject', $request->id) }}',
-                                                            {{ Js::from($request->item?->name ?? '-') }}
-                                                        )">
+                                                        '{{ route('admin.restock-requests.reject', $request->id) }}',
+                                                        {{ Js::from($request->item?->name ?? '-') }}
+                                                    )">
                                                         <i class="bi bi-x-circle"></i>
                                                         Tolak
                                                     </button>
@@ -249,41 +250,32 @@
 
                                                 <button type="button" class="action-danger"
                                                     onclick="confirmRestockAction(
-                                                        '{{ route('admin.restock-requests.destroy', $request->id) }}',
-                                                        {{ Js::from($request->item?->name ?? '-') }},
-                                                        'delete'
-                                                    )">
+                                                    '{{ route('admin.restock-requests.destroy', $request->id) }}',
+                                                    {{ Js::from($request->item?->name ?? '-') }},
+                                                    'delete'
+                                                )">
                                                     <i class="bi bi-trash3"></i>
                                                     Hapus
                                                 </button>
                                             @endif
-
                                         </div>
                                     </div>
                                 </td>
-
                             </tr>
-
                         @empty
-
                             <tr>
                                 <td colspan="7">
                                     <div class="restock-empty">
                                         <div class="restock-empty-icon">
                                             <i class="bi bi-clipboard-check"></i>
                                         </div>
-
-                                        <strong>
-                                            Belum ada ajuan restock
-                                        </strong>
-
+                                        <strong>Belum ada ajuan restock</strong>
                                         <span>
                                             Ajuan dari barista akan muncul di halaman ini.
                                         </span>
                                     </div>
                                 </td>
                             </tr>
-
                         @endforelse
                     </tbody>
                 </table>
@@ -294,7 +286,6 @@
                     {{ $restockRequests->links() }}
                 </div>
             @endif
-
         </div>
     </div>
 
@@ -303,7 +294,6 @@
         <div class="restock-modal-overlay" onclick="closeRejectModal()"></div>
 
         <div class="restock-modal-dialog">
-
             <div class="restock-modal-header">
                 <div class="restock-modal-icon restock-modal-icon-warning">
                     <i class="bi bi-x-circle"></i>
@@ -324,7 +314,6 @@
                 @method('PATCH')
 
                 <div class="restock-modal-body">
-
                     <label for="rejection_reason">
                         Alasan Penolakan
                         <span>*</span>
@@ -334,11 +323,8 @@
                         placeholder="Masukkan alasan pengajuan ditolak..." required></textarea>
 
                     @error('rejection_reason')
-                        <small class="restock-error">
-                            {{ $message }}
-                        </small>
+                        <small class="restock-error">{{ $message }}</small>
                     @enderror
-
                 </div>
 
                 <div class="restock-modal-footer">
@@ -352,7 +338,6 @@
                     </button>
                 </div>
             </form>
-
         </div>
     </div>
 
@@ -361,7 +346,6 @@
         @csrf
         <input type="hidden" name="_method" id="restockActionMethod">
     </form>
-
 @endsection
 
 @push('scripts')
@@ -374,17 +358,13 @@
             });
 
             const menu = button.nextElementSibling;
-
             menu.classList.toggle('show');
 
             if (menu.classList.contains('show')) {
                 const rect = button.getBoundingClientRect();
 
-                menu.style.top =
-                    (rect.bottom + window.scrollY + 6) + 'px';
-
-                menu.style.left =
-                    (rect.right + window.scrollX - menu.offsetWidth) + 'px';
+                menu.style.top = (rect.bottom + window.scrollY + 6) + 'px';
+                menu.style.left = (rect.right + window.scrollX - menu.offsetWidth) + 'px';
             }
         }
 
@@ -398,7 +378,7 @@
             if (action === 'approve') {
                 title = 'Setujui Pengajuan';
                 message =
-                    `Apakah Anda yakin ingin menyetujui pengajuan restock barang ${itemName}? Stok barang akan bertambah setelah pengajuan disetujui.`;
+                    `Apakah Anda yakin ingin menyetujui pengajuan restock barang ${itemName}? Persetujuan ini tidak langsung menambah stok. Stok bertambah saat barang diterima melalui Barang Masuk.`;
                 method = 'PATCH';
                 submitText = 'Ya, Setujui';
                 icon = 'bi-check-circle';
@@ -406,8 +386,7 @@
 
             if (action === 'delete') {
                 title = 'Hapus Pengajuan';
-                message =
-                    `Pengajuan ${itemName} akan dipindahkan ke data terhapus dan masih dapat dipulihkan. Lanjutkan?`;
+                message = `Pengajuan ${itemName} akan dipindahkan ke data terhapus dan masih dapat dipulihkan. Lanjutkan?`;
                 method = 'DELETE';
                 submitText = 'Ya, Hapus';
                 icon = 'bi-trash3';
@@ -415,8 +394,7 @@
 
             if (action === 'restore') {
                 title = 'Pulihkan Pengajuan';
-                message =
-                    `Apakah Anda yakin ingin memulihkan pengajuan ${itemName}?`;
+                message = `Apakah Anda yakin ingin memulihkan pengajuan ${itemName}?`;
                 method = 'PATCH';
                 submitText = 'Ya, Pulihkan';
                 icon = 'bi-arrow-counterclockwise';
@@ -424,8 +402,7 @@
 
             if (action === 'force-delete') {
                 title = 'Hapus Permanen';
-                message =
-                    `Pengajuan ${itemName} akan dihapus secara permanen dan tidak dapat dipulihkan. Lanjutkan?`;
+                message = `Pengajuan ${itemName} akan dihapus secara permanen dan tidak dapat dipulihkan. Lanjutkan?`;
                 method = 'DELETE';
                 submitText = 'Ya, Hapus Permanen';
                 icon = 'bi-trash3';
@@ -449,9 +426,7 @@
             const textarea = document.getElementById('rejection_reason');
 
             form.action = url;
-            itemNameElement.textContent =
-                `Barang: ${itemName}`;
-
+            itemNameElement.textContent = `Barang: ${itemName}`;
             textarea.value = '';
 
             modal.classList.add('show');
