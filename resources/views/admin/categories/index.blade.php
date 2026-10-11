@@ -3,7 +3,7 @@
 @section('title', 'Master Kategori')
 
 @push('styles')
-    @vite('resources/css/admin/master.css')
+    @vite('resources/css/admin/categories.css')
 @endpush
 
 @section('content')

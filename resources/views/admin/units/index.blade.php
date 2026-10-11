@@ -3,7 +3,7 @@
 @section('title', 'Master Unit')
 
 @push('styles')
-    @vite('resources/css/admin/master.css')
+    @vite('resources/css/admin/units.css')
 @endpush
 
 @section('content')
