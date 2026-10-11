@@ -16,7 +16,7 @@ use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Barista\DashboardController as BaristaDashboardController;
 
 Route::middleware('guest')->group(function () {
-    Route::get('/login', [
+    Route::get('/', [
         AuthController::class,
         'showLogin',
     ])->name('login');
