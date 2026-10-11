@@ -1,8 +1,4 @@
-@if (auth()->user()->role === 'barista')
-    @extends('layouts.barista')
-@else
-    @extends('layouts.app')
-@endif
+@extends(auth()->user()->role === 'barista' ? 'layouts.barista' : 'layouts.app')
 
 @section('title', 'Profile')
 

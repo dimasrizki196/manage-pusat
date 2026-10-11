@@ -52,20 +52,6 @@
             </div>
         @endif
 
-        @if ($errors->any())
-            <div class="items-alert items-alert-danger">
-                <i class="bi bi-exclamation-circle-fill"></i>
-
-                <div>
-                    @foreach ($errors->all() as $error)
-                        <div>{{ $error }}</div>
-                    @endforeach
-                </div>
-
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Tutup"></button>
-            </div>
-        @endif
-
         {{-- FILTER --}}
         <div class="items-filter-card">
             <form method="GET" action="{{ route('admin.items.index') }}" class="items-filter-form">
@@ -150,7 +136,7 @@
                     </thead>
 
                     <tbody>
-                        @forelse ($items as $index => $item)
+                        @forelse ($items as $index =>$item)
                             @php
                                 $isInactive = $item->activity?->deleted_at !== null;
                                 $isLowStock = !$isInactive && $item->stock <= $item->stock_min;
@@ -309,16 +295,32 @@
                 <form id="itemForm" method="POST" action="{{ route('admin.items.store') }}">
                     @csrf
 
-                    <input type="hidden" name="_method" id="itemFormMethod" value="POST">
+                    <input type="hidden" name="_method" id="itemFormMethod" value="{{ old('_method', 'POST') }}">
 
                     <div class="modal-body">
+                        {{-- VALIDASI ERROR DIPINDAH KESINI --}}
+                        @if ($errors->any())
+                            <div class="items-alert items-alert-danger mb-4">
+                                <i class="bi bi-exclamation-circle-fill"></i>
+
+                                <div>
+                                    @foreach ($errors->all() as $error)
+                                        <div>{{ $error }}</div>
+                                    @endforeach
+                                </div>
+
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                    aria-label="Tutup"></button>
+                            </div>
+                        @endif
+
                         <div class="items-form-group">
                             <label for="itemName">
                                 Nama Barang
                             </label>
 
                             <input type="text" id="itemName" name="name" class="form-control"
-                                placeholder="Contoh: Arabica Gayo" required>
+                                placeholder="Contoh: Arabica Gayo" value="{{ old('name') }}" required>
                         </div>
 
                         <div class="items-form-row">
@@ -334,7 +336,7 @@
 
                                     @foreach ($categories as $category)
                                         @if (!$category->activity || !$category->activity->deleted_at)
-                                            <option value="{{ $category->id }}">
+                                            <option value="{{ $category->id }}" @selected(old('category_id') == $category->id)>
                                                 {{ $category->name }}
                                             </option>
                                         @endif
@@ -354,7 +356,7 @@
 
                                     @foreach ($units as $unit)
                                         @if (!$unit->activity || !$unit->activity->deleted_at)
-                                            <option value="{{ $unit->id }}">
+                                            <option value="{{ $unit->id }}" @selected(old('unit_id') == $unit->id)>
                                                 {{ $unit->name }}
                                             </option>
                                         @endif
@@ -369,7 +371,7 @@
                             </label>
 
                             <input type="number" id="itemStockMin" name="stock_min" class="form-control"
-                                min="0" step="0.01" value="0" required>
+                                min="0" step="0.01" value="{{ old('stock_min', 0) }}" required>
 
                             <small>
                                 Stok awal barang otomatis dimulai dari 0.
@@ -409,6 +411,13 @@
             const itemFormModal = itemFormModalElement ?
                 bootstrap.Modal.getOrCreateInstance(itemFormModalElement) :
                 null;
+
+            // MENAMPILKAN KEMBALI MODAL JIKA ADA ERROR VALIDASI SETELAH RELOAD
+            @if ($errors->any())
+                if (itemFormModal) {
+                    itemFormModal.show();
+                }
+            @endif
 
             const actionMenu = document.getElementById('itemActionMenu');
             const actionShow = document.getElementById('itemActionShow');
@@ -559,10 +568,12 @@
                 itemFormTitle.textContent = 'Tambah Barang';
                 itemFormSubmit.textContent = 'Simpan Barang';
 
-                itemName.value = '';
-                itemCategory.value = '';
-                itemUnit.value = '';
-                itemStockMin.value = '0';
+                @if (!$errors->any())
+                    itemName.value = '';
+                    itemCategory.value = '';
+                    itemUnit.value = '';
+                    itemStockMin.value = '0';
+                @endif
 
                 itemFormModal.show();
             };

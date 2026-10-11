@@ -26,6 +26,7 @@ class StoreItemRequest extends FormRequest
                 'required',
                 'string',
                 'max:255',
+                'not_regex:/[0-9]/',
             ],
 
             'unit_id' => [
@@ -50,6 +51,7 @@ class StoreItemRequest extends FormRequest
 
             'name.required' => 'Nama barang wajib diisi.',
             'name.max' => 'Nama barang maksimal 255 karakter.',
+            'name.not_regex' => 'Nama barang tidak boleh angka',
 
             'unit_id.required' => 'Satuan wajib dipilih.',
             'unit_id.exists' => 'Satuan tidak ditemukan.',
