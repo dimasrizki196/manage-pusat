@@ -18,11 +18,8 @@
                     <i class="bi bi-chevron-right"></i>
                     <span>Master Kategori</span>
                 </div>
-
                 <h1 class="master-page-title">Master Kategori</h1>
-                <p class="master-page-subtitle">
-                    Kelola kategori yang digunakan pada barang.
-                </p>
+                <p class="master-page-subtitle">Kelola kategori yang digunakan pada barang.</p>
             </div>
 
             <div class="master-page-header-actions">
@@ -51,7 +48,6 @@
         @if ($errors->any())
             <div class="master-alert master-alert-danger">
                 <i class="bi bi-exclamation-circle-fill"></i>
-
                 <div>
                     @foreach ($errors->all() as $error)
                         <div>{{ $error }}</div>
@@ -66,10 +62,7 @@
                     <h2>Daftar Kategori</h2>
                     <p>Daftar kategori yang tersedia untuk barang.</p>
                 </div>
-
-                <span class="master-card-total">
-                    Total: {{ $categories->total() }} kategori
-                </span>
+                <span class="master-card-total">Total: {{ $categories->total() }} kategori</span>
             </div>
 
             <div class="master-table-wrapper">
@@ -78,47 +71,50 @@
                         <tr>
                             <th width="70">No</th>
                             <th>Nama Kategori</th>
+                            <th width="130">Status</th>
                             <th width="70">Aksi</th>
                         </tr>
                     </thead>
-
                     <tbody>
                         @forelse ($categories as $index => $category)
-                            <tr>
+                            <tr class="{{ $category->trashed() ? 'master-row-inactive' : '' }}">
                                 <td>
-                                    <span class="master-number">
-                                        {{ $categories->firstItem() + $index }}
-                                    </span>
+                                    <span class="master-number">{{ $categories->firstItem() + $index }}</span>
                                 </td>
-
                                 <td>
-                                    <span class="master-name">
-                                        {{ $category->name }}
-                                    </span>
+                                    <span class="master-name">{{ $category->name }}</span>
                                 </td>
-
+                                <td>
+                                    @if ($category->trashed())
+                                        <span class="master-status master-status-inactive">
+                                            <i class="bi bi-pause-circle"></i>
+                                            Nonaktif
+                                        </span>
+                                    @else
+                                        <span class="master-status master-status-active">
+                                            <i class="bi bi-check-circle"></i>
+                                            Aktif
+                                        </span>
+                                    @endif
+                                </td>
                                 <td>
                                     <button type="button" class="master-action-button js-category-action"
-                                        data-category-id="{{ $category->id }}" data-category-name="{{ $category->name }}"
-                                        aria-label="Aksi kategori" aria-expanded="false">
+                                        data-category-id="{{ $category->id }}"
+                                        data-category-status="{{ $category->trashed() ? 'inactive' : 'active' }}"
+                                        aria-label="Aksi kategori {{ $category->name }}" aria-expanded="false">
                                         <i class="bi bi-three-dots-vertical"></i>
                                     </button>
                                 </td>
                             </tr>
                         @empty
                             <tr>
-                                <td colspan="3">
+                                <td colspan="4">
                                     <div class="master-empty">
                                         <div class="master-empty-icon">
                                             <i class="bi bi-tags"></i>
                                         </div>
-
                                         <strong>Belum ada data kategori</strong>
-
-                                        <span>
-                                            Tambahkan kategori untuk digunakan pada data barang.
-                                        </span>
-
+                                        <span>Tambahkan kategori untuk digunakan pada data barang.</span>
                                         <button type="button" class="master-primary-button master-empty-button"
                                             data-bs-toggle="modal" data-bs-target="#createCategoryModal">
                                             <i class="bi bi-plus-lg"></i>
@@ -146,10 +142,13 @@
             <i class="bi bi-pencil"></i>
             <span>Edit</span>
         </button>
-
-        <button type="button" id="categoryActionDelete" class="danger">
-            <i class="bi bi-trash3"></i>
-            <span>Hapus</span>
+        <button type="button" id="categoryActionDeactivate" class="danger">
+            <i class="bi bi-pause-circle"></i>
+            <span>Nonaktifkan</span>
+        </button>
+        <button type="button" id="categoryActionRestore">
+            <i class="bi bi-arrow-counterclockwise"></i>
+            <span>Aktifkan kembali</span>
         </button>
     </div>
 
@@ -162,27 +161,17 @@
                         <h5 class="modal-title">Tambah Kategori</h5>
                         <p>Tambahkan kategori baru.</p>
                     </div>
-
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
                 </div>
-
                 <form action="{{ route('admin.categories.store') }}" method="POST">
                     @csrf
-
                     <div class="modal-body">
-                        <label for="create_category_name" class="master-form-label">
-                            Nama Kategori
-                        </label>
-
+                        <label for="create_category_name" class="master-form-label">Nama Kategori</label>
                         <input type="text" id="create_category_name" name="name" class="master-form-input"
                             placeholder="Contoh: Biji Kopi" value="{{ old('name') }}" required autocomplete="off">
                     </div>
-
                     <div class="modal-footer">
-                        <button type="button" class="master-secondary-button" data-bs-dismiss="modal">
-                            Batal
-                        </button>
-
+                        <button type="button" class="master-secondary-button" data-bs-dismiss="modal">Batal</button>
                         <button type="submit" class="master-primary-button">
                             <i class="bi bi-check2"></i>
                             Simpan
@@ -202,28 +191,18 @@
                         <h5 class="modal-title">Edit Kategori</h5>
                         <p>Perbarui informasi kategori.</p>
                     </div>
-
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
                 </div>
-
                 <form id="editCategoryForm" method="POST">
                     @csrf
                     @method('PUT')
-
                     <div class="modal-body">
-                        <label for="edit_category_name" class="master-form-label">
-                            Nama Kategori
-                        </label>
-
+                        <label for="edit_category_name" class="master-form-label">Nama Kategori</label>
                         <input type="text" id="edit_category_name" name="name" class="master-form-input" required
                             autocomplete="off">
                     </div>
-
                     <div class="modal-footer">
-                        <button type="button" class="master-secondary-button" data-bs-dismiss="modal">
-                            Batal
-                        </button>
-
+                        <button type="button" class="master-secondary-button" data-bs-dismiss="modal">Batal</button>
                         <button type="submit" class="master-primary-button">
                             <i class="bi bi-check2"></i>
                             Simpan Perubahan
@@ -234,33 +213,53 @@
         </div>
     </div>
 
-    {{-- DELETE CONFIRMATION --}}
-    <div class="modal fade" id="deleteCategoryModal" tabindex="-1" aria-hidden="true">
+    {{-- DEACTIVATE CONFIRMATION --}}
+    <div class="modal fade" id="deactivateCategoryModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content master-confirm-modal">
                 <div class="master-confirm-icon danger">
-                    <i class="bi bi-trash3"></i>
+                    <i class="bi bi-pause-circle"></i>
                 </div>
-
-                <h5>Hapus Kategori?</h5>
-
+                <h5>Nonaktifkan Kategori?</h5>
                 <p>
-                    Anda yakin ingin menghapus
-                    <strong id="deleteCategoryName"></strong>?
+                    Kategori <strong id="deactivateCategoryName"></strong> akan dinonaktifkan.
+                    Data tidak dihapus permanen dan masih dapat diaktifkan kembali.
                 </p>
-
                 <div class="master-confirm-actions">
-                    <button type="button" class="master-secondary-button" data-bs-dismiss="modal">
-                        Batal
-                    </button>
-
-                    <form id="deleteCategoryForm" method="POST">
+                    <button type="button" class="master-secondary-button" data-bs-dismiss="modal">Batal</button>
+                    <form id="deactivateCategoryForm" method="POST">
                         @csrf
                         @method('DELETE')
-
                         <button type="submit" class="master-danger-button">
-                            <i class="bi bi-trash3"></i>
-                            Ya, Hapus
+                            <i class="bi bi-pause-circle"></i>
+                            Ya, Nonaktifkan
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- RESTORE CONFIRMATION --}}
+    <div class="modal fade" id="restoreCategoryModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content master-confirm-modal">
+                <div class="master-confirm-icon">
+                    <i class="bi bi-arrow-counterclockwise"></i>
+                </div>
+                <h5>Aktifkan Kembali Kategori?</h5>
+                <p>
+                    Anda yakin ingin mengaktifkan kembali kategori
+                    <strong id="restoreCategoryName"></strong>?
+                </p>
+                <div class="master-confirm-actions">
+                    <button type="button" class="master-secondary-button" data-bs-dismiss="modal">Batal</button>
+                    <form id="restoreCategoryForm" method="POST">
+                        @csrf
+                        @method('PATCH')
+                        <button type="submit" class="master-primary-button">
+                            <i class="bi bi-check2-circle"></i>
+                            Ya, Aktifkan
                         </button>
                     </form>
                 </div>
@@ -274,32 +273,33 @@
         document.addEventListener('DOMContentLoaded', function() {
             const actionMenu = document.getElementById('categoryActionMenu');
             const actionEdit = document.getElementById('categoryActionEdit');
-            const actionDelete = document.getElementById('categoryActionDelete');
+            const actionDeactivate = document.getElementById('categoryActionDeactivate');
+            const actionRestore = document.getElementById('categoryActionRestore');
 
             const editModalElement = document.getElementById('editCategoryModal');
-            const deleteModalElement = document.getElementById('deleteCategoryModal');
+            const deactivateModalElement = document.getElementById('deactivateCategoryModal');
+            const restoreModalElement = document.getElementById('restoreCategoryModal');
 
             const editForm = document.getElementById('editCategoryForm');
             const editInput = document.getElementById('edit_category_name');
-
-            const deleteForm = document.getElementById('deleteCategoryForm');
-            const deleteName = document.getElementById('deleteCategoryName');
+            const deactivateForm = document.getElementById('deactivateCategoryForm');
+            const deactivateName = document.getElementById('deactivateCategoryName');
+            const restoreForm = document.getElementById('restoreCategoryForm');
+            const restoreName = document.getElementById('restoreCategoryName');
 
             const categoryUpdateUrl = @json(route('admin.categories.update', ['category' => '__CATEGORY_ID__']));
-
-            const categoryDeleteUrl = @json(route('admin.categories.destroy', ['category' => '__CATEGORY_ID__']));
+            const categoryDeactivateUrl = @json(route('admin.categories.destroy', ['category' => '__CATEGORY_ID__']));
+            const categoryRestoreUrl = @json(route('admin.categories.restore', ['id' => '__CATEGORY_ID__']));
 
             let activeButton = null;
             let activeCategory = null;
 
             function buildCategoryUrl(template, id) {
-                return template.replace('__CATEGORY_ID__', id);
+                return template.replace('__CATEGORY_ID__', encodeURIComponent(id));
             }
 
             function closeActionMenu() {
-                if (!actionMenu) {
-                    return;
-                }
+                if (!actionMenu) return;
 
                 actionMenu.hidden = true;
 
@@ -312,52 +312,35 @@
             }
 
             function positionActionMenu(button) {
-                if (!actionMenu || !button) {
-                    return;
-                }
+                if (!actionMenu || !button) return;
 
                 actionMenu.hidden = false;
 
                 const buttonRect = button.getBoundingClientRect();
                 const menuRect = actionMenu.getBoundingClientRect();
-
                 const padding = 10;
 
                 let top = buttonRect.bottom + 6;
                 let left = buttonRect.right - menuRect.width;
 
-                if (left < padding) {
-                    left = padding;
-                }
-
-                if (left + menuRect.width > window.innerWidth - padding) {
-                    left = window.innerWidth - menuRect.width - padding;
-                }
+                left = Math.max(padding, Math.min(left, window.innerWidth - menuRect.width - padding));
 
                 if (top + menuRect.height > window.innerHeight - padding) {
                     top = buttonRect.top - menuRect.height - 6;
                 }
 
-                if (top < padding) {
-                    top = padding;
-                }
+                top = Math.max(padding, top);
 
-                actionMenu.style.top = top + 'px';
-                actionMenu.style.left = left + 'px';
+                actionMenu.style.top = `${top}px`;
+                actionMenu.style.left = `${left}px`;
             }
 
             function openActionMenu(button) {
                 const categoryId = button.dataset.categoryId;
-                const categoryName = button.dataset.categoryName || '';
 
-                if (!categoryId) {
-                    return;
-                }
+                if (!categoryId) return;
 
-                if (
-                    activeButton === button &&
-                    !actionMenu.hidden
-                ) {
+                if (activeButton === button && !actionMenu.hidden) {
                     closeActionMenu();
                     return;
                 }
@@ -365,45 +348,35 @@
                 closeActionMenu();
 
                 activeButton = button;
-
                 activeCategory = {
                     id: categoryId,
-                    name: categoryName
+                    name: button.closest('tr')?.querySelector('.master-name')?.textContent.trim() || '',
+                    status: button.dataset.categoryStatus
                 };
 
-                button.setAttribute('aria-expanded', 'true');
+                actionEdit.hidden = activeCategory.status === 'inactive';
+                actionDeactivate.hidden = activeCategory.status === 'inactive';
+                actionRestore.hidden = activeCategory.status !== 'inactive';
 
+                button.setAttribute('aria-expanded', 'true');
                 positionActionMenu(button);
             }
 
-            document
-                .querySelectorAll('.js-category-action')
-                .forEach(function(button) {
-                    button.addEventListener('click', function(event) {
-                        event.stopPropagation();
-                        openActionMenu(this);
-                    });
+            document.querySelectorAll('.js-category-action').forEach(function(button) {
+                button.addEventListener('click', function(event) {
+                    event.stopPropagation();
+                    openActionMenu(this);
                 });
+            });
 
-            actionEdit?.addEventListener('click', function() {
-                if (!activeCategory || !editForm || !editInput) {
-                    return;
-                }
+            actionEdit.addEventListener('click', function() {
+                if (!activeCategory || !editForm || !editInput) return;
 
-                editForm.action = buildCategoryUrl(
-                    categoryUpdateUrl,
-                    activeCategory.id
-                );
-
+                editForm.action = buildCategoryUrl(categoryUpdateUrl, activeCategory.id);
                 editInput.value = activeCategory.name;
 
                 closeActionMenu();
-
-                const modal = bootstrap.Modal.getOrCreateInstance(
-                    editModalElement
-                );
-
-                modal.show();
+                bootstrap.Modal.getOrCreateInstance(editModalElement).show();
 
                 setTimeout(function() {
                     editInput.focus();
@@ -411,57 +384,44 @@
                 }, 300);
             });
 
-            actionDelete?.addEventListener('click', function() {
-                if (!activeCategory || !deleteForm || !deleteName) {
-                    return;
-                }
+            actionDeactivate.addEventListener('click', function() {
+                if (!activeCategory || !deactivateForm || !deactivateName) return;
 
-                deleteForm.action = buildCategoryUrl(
-                    categoryDeleteUrl,
-                    activeCategory.id
-                );
-
-                deleteName.textContent = activeCategory.name;
+                deactivateForm.action = buildCategoryUrl(categoryDeactivateUrl, activeCategory.id);
+                deactivateName.textContent = activeCategory.name;
 
                 closeActionMenu();
+                bootstrap.Modal.getOrCreateInstance(deactivateModalElement).show();
+            });
 
-                const modal = bootstrap.Modal.getOrCreateInstance(
-                    deleteModalElement
-                );
+            actionRestore.addEventListener('click', function() {
+                if (!activeCategory || !restoreForm || !restoreName) return;
 
-                modal.show();
+                restoreForm.action = buildCategoryUrl(categoryRestoreUrl, activeCategory.id);
+                restoreName.textContent = activeCategory.name;
+
+                closeActionMenu();
+                bootstrap.Modal.getOrCreateInstance(restoreModalElement).show();
             });
 
             document.addEventListener('click', function(event) {
-                if (
-                    !event.target.closest('.js-category-action') &&
-                    !event.target.closest('#categoryActionMenu')
-                ) {
+                if (!event.target.closest('.js-category-action') &&
+                    !event.target.closest('#categoryActionMenu')) {
                     closeActionMenu();
                 }
             });
 
             window.addEventListener('resize', function() {
-                if (activeButton && !actionMenu.hidden) {
-                    positionActionMenu(activeButton);
-                }
+                if (activeButton && !actionMenu.hidden) positionActionMenu(activeButton);
             });
 
             window.addEventListener('scroll', function() {
-                if (activeButton && !actionMenu.hidden) {
-                    positionActionMenu(activeButton);
-                }
+                if (activeButton && !actionMenu.hidden) positionActionMenu(activeButton);
             }, true);
 
-            const createModal = document.getElementById('createCategoryModal');
-
-            if (createModal) {
-                createModal.addEventListener('shown.bs.modal', function() {
-                    document
-                        .getElementById('create_category_name')
-                        ?.focus();
-                });
-            }
+            document.getElementById('createCategoryModal')?.addEventListener('shown.bs.modal', function() {
+                document.getElementById('create_category_name')?.focus();
+            });
         });
     </script>
 @endpush

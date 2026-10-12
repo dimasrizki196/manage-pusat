@@ -60,18 +60,6 @@ class UnitController extends Controller
         Unit $unit
     ): RedirectResponse {
 
-        // /*
-        //  * Untuk sementara kita cegah penghapusan
-        //  * jika unit sudah digunakan oleh barang.
-        //  */
-
-        // if ($unit->items()->exists()) {
-        //     return back()->with(
-        //         'error',
-        //         'Unit tidak dapat dihapus karena masih digunakan oleh barang.'
-        //     );
-        // }
-
         $this->unitService->delete(
             $unit,
             Auth::id()
@@ -80,5 +68,21 @@ class UnitController extends Controller
         return redirect()
             ->route('admin.units.index')
             ->with('success', 'Unit berhasil dinonaktifkan.');
+    }
+
+
+    public function restore(int $id): RedirectResponse
+    {
+        $unit = Unit::withTrashed()->findOrFail($id);
+
+        if (!$unit->trashed()) {
+            return back()->with('error', 'Unit tersebut sudah aktif.');
+        }
+
+        $this->unitService->restore($unit, Auth::id());
+
+        return redirect()
+            ->route('admin.units.index')
+            ->with('success', 'Unit berhasil diaktifkan kembali.');
     }
 }

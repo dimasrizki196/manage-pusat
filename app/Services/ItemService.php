@@ -134,6 +134,20 @@ class ItemService
         Item $item
     ): void {
         DB::transaction(function () use ($item) {
+            $hasRestockRequests = DB::table('restock_requests')
+                ->where('item_id', $item->id)
+                ->exists();
+
+            $hasTransactions = DB::table('transactions')
+                ->where('item_id', $item->id)
+                ->exists();
+
+            if ($hasRestockRequests || $hasTransactions) {
+                throw \Illuminate\Validation\ValidationException::withMessages([
+                    'item' => 'Barang tidak dapat dihapus permanen karena masih memiliki riwayat pengajuan restock atau transaksi.',
+                ]);
+            }
+
             $item->forceDelete();
         });
     }

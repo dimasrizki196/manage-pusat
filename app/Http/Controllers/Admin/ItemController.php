@@ -13,6 +13,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
+use Illuminate\Validation\ValidationException;
 
 class ItemController extends Controller
 {
@@ -110,23 +111,23 @@ class ItemController extends Controller
             );
     }
 
-    public function forceDelete(
-        int $id
-    ): RedirectResponse {
-        $item = Item::query()
-            ->findOrFail($id);
+    public function forceDelete(int $id): RedirectResponse
+    {
+        $item = Item::withTrashed()->findOrFail($id);
 
-        $this->itemService->forceDelete(
-            $item,
-            Auth::id()
-        );
+        try {
+            $this->itemService->forceDelete($item, Auth::id());
 
-        return redirect()
-            ->route('admin.items.index')
-            ->with(
-                'success',
-                'Barang berhasil dihapus permanen.'
-            );
+            return redirect()
+                ->route('admin.items.index')
+                ->with('success', 'Barang berhasil dihapus permanen.');
+        } catch (ValidationException $e) {
+            return redirect()
+                ->back()
+                ->withErrors($e->errors())
+                ->withInput()
+                ->with('open_item_modal', true);
+        }
     }
 
     public function show(
