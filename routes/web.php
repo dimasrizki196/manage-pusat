@@ -95,27 +95,31 @@ Route::middleware('auth')->group(function () {
                 [UserController::class, 'forceDestroy']
             )->name('users.forceDestroy');
 
-            Route::resource(
-                'units',
-                UnitController::class
-            )->only([
-                'index',
-                'store',
-                'update',
-                'destroy',
-                'restore',
-            ]);
+            Route::resource('units', UnitController::class)
+                ->only([
+                    'index',
+                    'store',
+                    'update',
+                    'destroy',
+                ]);
 
-            Route::resource(
-                'categories',
-                CategoryController::class
-            )->only([
-                'index',
-                'store',
-                'update',
-                'destroy',
-                'restore',
-            ]);
+            Route::patch(
+                'units/{unit}/restore',
+                [UnitController::class, 'restore']
+            )->name('units.restore');
+
+            Route::resource('categories', CategoryController::class)
+                ->only([
+                    'index',
+                    'store',
+                    'update',
+                    'destroy',
+                ]);
+
+            Route::patch(
+                'categories/{category}/restore',
+                [CategoryController::class, 'restore']
+            )->name('categories.restore');
 
             Route::resource('items', ItemController::class)
                 ->except([

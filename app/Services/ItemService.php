@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Item;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 
 class ItemService
 {
@@ -130,27 +131,28 @@ class ItemService
         });
     }
 
-    public function forceDelete(
-        Item $item
-    ): void {
+
+    public function forceDelete(Item $item, int $userId): void
+    {
         DB::transaction(function () use ($item) {
             $hasRestockRequests = DB::table('restock_requests')
                 ->where('item_id', $item->id)
                 ->exists();
-
+    
             $hasTransactions = DB::table('transactions')
                 ->where('item_id', $item->id)
                 ->exists();
-
+    
             if ($hasRestockRequests || $hasTransactions) {
-                throw \Illuminate\Validation\ValidationException::withMessages([
+                throw ValidationException::withMessages([
                     'item' => 'Barang tidak dapat dihapus permanen karena masih memiliki riwayat pengajuan restock atau transaksi.',
                 ]);
             }
-
-            $item->forceDelete();
+    
+            $item->delete();
         });
     }
+
 
     public function restore(Item $item, int $userId): Item
     {

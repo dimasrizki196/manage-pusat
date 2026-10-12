@@ -113,7 +113,7 @@ class ItemController extends Controller
 
     public function forceDelete(int $id): RedirectResponse
     {
-        $item = Item::withTrashed()->findOrFail($id);
+        $item = Item::query()->findOrFail($id);
 
         try {
             $this->itemService->forceDelete($item, Auth::id());
