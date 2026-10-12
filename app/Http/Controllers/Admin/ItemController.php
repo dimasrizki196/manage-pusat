@@ -123,7 +123,7 @@ class ItemController extends Controller
                 ->with('success', 'Barang berhasil dihapus permanen.');
         } catch (ValidationException $e) {
             return redirect()
-                ->back()
+                ->route('admin.items.index')
                 ->withErrors($e->errors())
                 ->withInput()
                 ->with('open_item_modal', true);
