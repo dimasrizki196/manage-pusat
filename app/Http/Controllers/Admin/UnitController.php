@@ -14,20 +14,17 @@ use Illuminate\Support\Facades\Auth;
 class UnitController extends Controller
 {
     public function __construct(
-        protected UnitService $unitService
+        private UnitService $unitService
     ) {}
 
     public function index(): View
     {
-        return view(
-            'admin.units.index',
-            [
-                'units' => $this->unitService->paginate(),
-            ]
-        );
+        return view('admin.units.index', [
+            'units' => $this->unitService->paginate(),
+        ]);
     }
 
-    public function store(StoreUnitRequest $request)
+    public function store(StoreUnitRequest $request): RedirectResponse
     {
         $this->unitService->create(
             $request->validated(),
@@ -43,23 +40,19 @@ class UnitController extends Controller
         UpdateUnitRequest $request,
         Unit $unit
     ): RedirectResponse {
-
         $this->unitService->update(
             $unit,
             $request->validated(),
             Auth::id()
         );
 
-        return back()->with(
-            'success',
-            'Unit berhasil diperbarui.'
-        );
+        return redirect()
+            ->route('admin.units.index')
+            ->with('success', 'Unit berhasil diperbarui.');
     }
 
-    public function destroy(
-        Unit $unit
-    ): RedirectResponse {
-
+    public function destroy(Unit $unit): RedirectResponse
+    {
         $this->unitService->delete(
             $unit,
             Auth::id()
@@ -70,16 +63,12 @@ class UnitController extends Controller
             ->with('success', 'Unit berhasil dinonaktifkan.');
     }
 
-
-    public function restore(int $id): RedirectResponse
+    public function restore(Unit $unit): RedirectResponse
     {
-        $unit = Unit::withTrashed()->findOrFail($id);
-
-        if (!$unit->trashed()) {
-            return back()->with('error', 'Unit tersebut sudah aktif.');
-        }
-
-        $this->unitService->restore($unit, Auth::id());
+        $this->unitService->restore(
+            $unit,
+            Auth::id()
+        );
 
         return redirect()
             ->route('admin.units.index')

@@ -1,180 +1,174 @@
 @extends('layouts.app')
 
-@section('title', 'Master Kategori')
-
-@push('styles')
-    @vite('resources/css/admin/categories.css')
-@endpush
+@section('title', 'Kelola Kategori')
 
 @section('content')
-    <div class="admin-master-page">
-        <div class="master-page-header">
-            <div class="master-page-header-content">
-                <div class="master-breadcrumb">
-                    <a href="{{ route('admin.dashboard') }}">
-                        <i class="bi bi-grid"></i>
-                        <span>Dashboard</span>
-                    </a>
-                    <i class="bi bi-chevron-right"></i>
-                    <span>Master Kategori</span>
-                </div>
-                <h1 class="master-page-title">Master Kategori</h1>
-                <p class="master-page-subtitle">Kelola kategori yang digunakan pada barang.</p>
+    <div class="container-fluid py-4">
+        <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+            <div>
+                <h4 class="fw-bold mb-1">Kelola Kategori</h4>
+                <p class="text-muted mb-0">Kelola kategori barang pada stok toko.</p>
             </div>
-
-            <div class="master-page-header-actions">
-                <button type="button" class="master-primary-button" data-bs-toggle="modal"
-                    data-bs-target="#createCategoryModal">
-                    <i class="bi bi-plus-lg"></i>
-                    <span>Tambah Kategori</span>
-                </button>
-            </div>
+            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createCategoryModal">
+                <i class="bi bi-plus-lg me-1"></i> Tambah Kategori
+            </button>
         </div>
 
         @if (session('success'))
-            <div class="master-alert master-alert-success">
-                <i class="bi bi-check-circle-fill"></i>
-                <span>{{ session('success') }}</span>
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         @endif
 
         @if (session('error'))
-            <div class="master-alert master-alert-danger">
-                <i class="bi bi-exclamation-circle-fill"></i>
-                <span>{{ session('error') }}</span>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ session('error') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         @endif
 
         @if ($errors->any())
-            <div class="master-alert master-alert-danger">
-                <i class="bi bi-exclamation-circle-fill"></i>
-                <div>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                <div class="fw-semibold mb-1">Periksa kembali data kategori.</div>
+                <ul class="mb-0 ps-3">
                     @foreach ($errors->all() as $error)
-                        <div>{{ $error }}</div>
+                        <li>{{ $error }}</li>
                     @endforeach
-                </div>
+                </ul>
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
         @endif
 
-        <div class="master-card">
-            <div class="master-card-header">
-                <div>
-                    <h2>Daftar Kategori</h2>
-                    <p>Daftar kategori yang tersedia untuk barang.</p>
+        <div class="card border-0 shadow-sm">
+            <div class="card-body">
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6 col-lg-4">
+                        <div class="input-group">
+                            <span class="input-group-text bg-white">
+                                <i class="bi bi-search"></i>
+                            </span>
+                            <input type="text" id="categorySearch" class="form-control"
+                                placeholder="Cari nama kategori...">
+                        </div>
+                    </div>
                 </div>
-                <span class="master-card-total">Total: {{ $categories->total() }} kategori</span>
-            </div>
 
-            <div class="master-table-wrapper">
-                <table class="master-table">
-                    <thead>
-                        <tr>
-                            <th width="70">No</th>
-                            <th>Nama Kategori</th>
-                            <th width="130">Status</th>
-                            <th width="70">Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @forelse ($categories as $index => $category)
-                            <tr class="{{ $category->trashed() ? 'master-row-inactive' : '' }}">
-                                <td>
-                                    <span class="master-number">{{ $categories->firstItem() + $index }}</span>
-                                </td>
-                                <td>
-                                    <span class="master-name">{{ $category->name }}</span>
-                                </td>
-                                <td>
-                                    @if ($category->trashed())
-                                        <span class="master-status master-status-inactive">
-                                            <i class="bi bi-pause-circle"></i>
-                                            Nonaktif
-                                        </span>
-                                    @else
-                                        <span class="master-status master-status-active">
-                                            <i class="bi bi-check-circle"></i>
-                                            Aktif
-                                        </span>
-                                    @endif
-                                </td>
-                                <td>
-                                    <button type="button" class="master-action-button js-category-action"
-                                        data-category-id="{{ $category->id }}"
-                                        data-category-status="{{ $category->trashed() ? 'inactive' : 'active' }}"
-                                        aria-label="Aksi kategori {{ $category->name }}" aria-expanded="false">
-                                        <i class="bi bi-three-dots-vertical"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                        @empty
+                <div class="table-responsive">
+                    <table class="table align-middle table-hover" id="categoryTable">
+                        <thead class="table-light">
                             <tr>
-                                <td colspan="4">
-                                    <div class="master-empty">
-                                        <div class="master-empty-icon">
-                                            <i class="bi bi-tags"></i>
-                                        </div>
-                                        <strong>Belum ada data kategori</strong>
-                                        <span>Tambahkan kategori untuk digunakan pada data barang.</span>
-                                        <button type="button" class="master-primary-button master-empty-button"
-                                            data-bs-toggle="modal" data-bs-target="#createCategoryModal">
-                                            <i class="bi bi-plus-lg"></i>
-                                            Tambah Kategori
-                                        </button>
-                                    </div>
-                                </td>
+                                <th style="width: 70px;">No.</th>
+                                <th>Nama Kategori</th>
+                                <th style="width: 150px;">Status</th>
+                                <th class="text-end" style="width: 130px;">Aksi</th>
                             </tr>
-                        @endforelse
-                    </tbody>
-                </table>
-            </div>
+                        </thead>
+                        <tbody>
+                            @forelse ($categories as $category)
+                                @php
+                                    $isInactive = !is_null($category->activity_deleted_at);
+                                @endphp
+                                <tr>
+                                    <td>{{ $categories->firstItem() + $loop->index }}</td>
+                                    <td class="category-name fw-medium">
+                                        {{ $category->name }}
+                                    </td>
+                                    <td>
+                                        @if ($isInactive)
+                                            <span class="badge rounded-pill bg-secondary-subtle text-secondary">
+                                                Nonaktif
+                                            </span>
+                                        @else
+                                            <span class="badge rounded-pill bg-success-subtle text-success">
+                                                Aktif
+                                            </span>
+                                        @endif
+                                    </td>
+                                    <td class="text-end">
+                                        <div class="dropdown">
+                                            <button class="btn btn-sm btn-light border" data-bs-toggle="dropdown"
+                                                aria-expanded="false">
+                                                <i class="bi bi-three-dots-vertical"></i>
+                                            </button>
+                                            <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                                                @if (!$isInactive)
+                                                    <li>
+                                                        <button type="button" class="dropdown-item js-edit-category"
+                                                            data-id="{{ $category->id }}" data-name="{{ $category->name }}">
+                                                            <i class="bi bi-pencil me-2"></i>Edit
+                                                        </button>
+                                                    </li>
+                                                    <li>
+                                                        <hr class="dropdown-divider">
+                                                    </li>
+                                                    <li>
+                                                        <button type="button"
+                                                            class="dropdown-item text-danger js-delete-category"
+                                                            data-id="{{ $category->id }}" data-name="{{ $category->name }}">
+                                                            <i class="bi bi-archive me-2"></i>Nonaktifkan
+                                                        </button>
+                                                    </li>
+                                                @else
+                                                    <li>
+                                                        <form
+                                                            action="{{ route('admin.categories.restore', $category->id) }}"
+                                                            method="POST"
+                                                            onsubmit="return confirm('Aktifkan kembali kategori {{ addslashes($category->name) }}?')">
+                                                            @csrf
+                                                            @method('PATCH')
+                                                            <button type="submit" class="dropdown-item text-success">
+                                                                <i class="bi bi-arrow-counterclockwise me-2"></i>
+                                                                Aktifkan kembali
+                                                            </button>
+                                                        </form>
+                                                    </li>
+                                                @endif
+                                            </ul>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="4" class="text-center text-muted py-5">
+                                        Belum ada data kategori.
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
 
-            @if ($categories->hasPages())
-                <div class="master-pagination">
+                <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mt-3">
+                    <small class="text-muted">
+                        Menampilkan {{ $categories->firstItem() ?? 0 }}–{{ $categories->lastItem() ?? 0 }}
+                        dari {{ $categories->total() }} kategori
+                    </small>
                     {{ $categories->links() }}
                 </div>
-            @endif
+            </div>
         </div>
     </div>
 
-    {{-- GLOBAL ACTION MENU --}}
-    <div id="categoryActionMenu" class="master-global-action-menu" hidden>
-        <button type="button" id="categoryActionEdit">
-            <i class="bi bi-pencil"></i>
-            <span>Edit</span>
-        </button>
-        <button type="button" id="categoryActionDeactivate" class="danger">
-            <i class="bi bi-pause-circle"></i>
-            <span>Nonaktifkan</span>
-        </button>
-        <button type="button" id="categoryActionRestore">
-            <i class="bi bi-arrow-counterclockwise"></i>
-            <span>Aktifkan kembali</span>
-        </button>
-    </div>
-
-    {{-- CREATE MODAL --}}
+    {{-- Modal tambah kategori --}}
     <div class="modal fade" id="createCategoryModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content master-modal">
-                <div class="modal-header">
-                    <div>
-                        <h5 class="modal-title">Tambah Kategori</h5>
-                        <p>Tambahkan kategori baru.</p>
-                    </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
-                </div>
+            <div class="modal-content border-0 shadow">
                 <form action="{{ route('admin.categories.store') }}" method="POST">
                     @csrf
+                    <div class="modal-header">
+                        <h5 class="modal-title fw-bold">Tambah Kategori</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
                     <div class="modal-body">
-                        <label for="create_category_name" class="master-form-label">Nama Kategori</label>
-                        <input type="text" id="create_category_name" name="name" class="master-form-input"
-                            placeholder="Contoh: Biji Kopi" value="{{ old('name') }}" required autocomplete="off">
+                        <label for="createCategoryName" class="form-label">Nama kategori</label>
+                        <input type="text" name="name" id="createCategoryName" class="form-control" maxlength="100"
+                            placeholder="Contoh: Biji Kopi" required>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="master-secondary-button" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="master-primary-button">
-                            <i class="bi bi-check2"></i>
-                            Simpan
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-lg me-1"></i>Simpan
                         </button>
                     </div>
                 </form>
@@ -182,87 +176,55 @@
         </div>
     </div>
 
-    {{-- EDIT MODAL --}}
+    {{-- Modal edit kategori --}}
     <div class="modal fade" id="editCategoryModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content master-modal">
-                <div class="modal-header">
-                    <div>
-                        <h5 class="modal-title">Edit Kategori</h5>
-                        <p>Perbarui informasi kategori.</p>
-                    </div>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup"></button>
-                </div>
+            <div class="modal-content border-0 shadow">
                 <form id="editCategoryForm" method="POST">
                     @csrf
                     @method('PUT')
+                    <div class="modal-header">
+                        <h5 class="modal-title fw-bold">Edit Kategori</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
                     <div class="modal-body">
-                        <label for="edit_category_name" class="master-form-label">Nama Kategori</label>
-                        <input type="text" id="edit_category_name" name="name" class="master-form-input" required
-                            autocomplete="off">
+                        <label for="editCategoryName" class="form-label">Nama kategori</label>
+                        <input type="text" name="name" id="editCategoryName" class="form-control" maxlength="100"
+                            required>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="master-secondary-button" data-bs-dismiss="modal">Batal</button>
-                        <button type="submit" class="master-primary-button">
-                            <i class="bi bi-check2"></i>
-                            Simpan Perubahan
-                        </button>
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 
-    {{-- DEACTIVATE CONFIRMATION --}}
-    <div class="modal fade" id="deactivateCategoryModal" tabindex="-1" aria-hidden="true">
+    {{-- Modal konfirmasi nonaktifkan --}}
+    <div class="modal fade" id="deleteCategoryModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content master-confirm-modal">
-                <div class="master-confirm-icon danger">
-                    <i class="bi bi-pause-circle"></i>
-                </div>
-                <h5>Nonaktifkan Kategori?</h5>
-                <p>
-                    Kategori <strong id="deactivateCategoryName"></strong> akan dinonaktifkan.
-                    Data tidak dihapus permanen dan masih dapat diaktifkan kembali.
-                </p>
-                <div class="master-confirm-actions">
-                    <button type="button" class="master-secondary-button" data-bs-dismiss="modal">Batal</button>
-                    <form id="deactivateCategoryForm" method="POST">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="master-danger-button">
-                            <i class="bi bi-pause-circle"></i>
-                            Ya, Nonaktifkan
-                        </button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    {{-- RESTORE CONFIRMATION --}}
-    <div class="modal fade" id="restoreCategoryModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content master-confirm-modal">
-                <div class="master-confirm-icon">
-                    <i class="bi bi-arrow-counterclockwise"></i>
-                </div>
-                <h5>Aktifkan Kembali Kategori?</h5>
-                <p>
-                    Anda yakin ingin mengaktifkan kembali kategori
-                    <strong id="restoreCategoryName"></strong>?
-                </p>
-                <div class="master-confirm-actions">
-                    <button type="button" class="master-secondary-button" data-bs-dismiss="modal">Batal</button>
-                    <form id="restoreCategoryForm" method="POST">
-                        @csrf
-                        @method('PATCH')
-                        <button type="submit" class="master-primary-button">
-                            <i class="bi bi-check2-circle"></i>
-                            Ya, Aktifkan
-                        </button>
-                    </form>
-                </div>
+            <div class="modal-content border-0 shadow">
+                <form id="deleteCategoryForm" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <div class="modal-body text-center p-4">
+                        <div class="rounded-circle bg-warning-subtle text-warning d-inline-flex
+                        align-items-center justify-content-center mb-3"
+                            style="width: 64px; height: 64px;">
+                            <i class="bi bi-archive fs-3"></i>
+                        </div>
+                        <h5 class="fw-bold">Nonaktifkan Kategori?</h5>
+                        <p class="text-muted mb-0">
+                            Kategori <strong id="deleteCategoryName"></strong> akan dinonaktifkan.
+                            Kamu dapat mengaktifkannya kembali nanti.
+                        </p>
+                    </div>
+                    <div class="modal-footer justify-content-center border-0 pt-0 pb-4">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Batal</button>
+                        <button type="submit" class="btn btn-danger">Ya, Nonaktifkan</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -271,156 +233,51 @@
 @push('scripts')
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const actionMenu = document.getElementById('categoryActionMenu');
-            const actionEdit = document.getElementById('categoryActionEdit');
-            const actionDeactivate = document.getElementById('categoryActionDeactivate');
-            const actionRestore = document.getElementById('categoryActionRestore');
-
-            const editModalElement = document.getElementById('editCategoryModal');
-            const deactivateModalElement = document.getElementById('deactivateCategoryModal');
-            const restoreModalElement = document.getElementById('restoreCategoryModal');
+            const editModal = document.getElementById('editCategoryModal');
+            const deleteModal = document.getElementById('deleteCategoryModal');
 
             const editForm = document.getElementById('editCategoryForm');
-            const editInput = document.getElementById('edit_category_name');
-            const deactivateForm = document.getElementById('deactivateCategoryForm');
-            const deactivateName = document.getElementById('deactivateCategoryName');
-            const restoreForm = document.getElementById('restoreCategoryForm');
-            const restoreName = document.getElementById('restoreCategoryName');
+            const editName = document.getElementById('editCategoryName');
+            const deleteForm = document.getElementById('deleteCategoryForm');
+            const deleteName = document.getElementById('deleteCategoryName');
 
-            const categoryUpdateUrl = @json(route('admin.categories.update', ['category' => '__CATEGORY_ID__']));
-            const categoryDeactivateUrl = @json(route('admin.categories.destroy', ['category' => '__CATEGORY_ID__']));
-            const categoryRestoreUrl = @json(route('admin.categories.restore', ['id' => '__CATEGORY_ID__']));
+            const updateUrl = @json(route('admin.categories.update', ['category' => '__ID__']));
+            const deleteUrl = @json(route('admin.categories.destroy', ['category' => '__ID__']));
 
-            let activeButton = null;
-            let activeCategory = null;
+            document.querySelectorAll('.js-edit-category').forEach(function(button) {
+                button.addEventListener('click', function() {
+                    const id = this.dataset.id;
 
-            function buildCategoryUrl(template, id) {
-                return template.replace('__CATEGORY_ID__', encodeURIComponent(id));
-            }
+                    editForm.action = updateUrl.replace('__ID__', id);
+                    editName.value = this.dataset.name;
 
-            function closeActionMenu() {
-                if (!actionMenu) return;
-
-                actionMenu.hidden = true;
-
-                if (activeButton) {
-                    activeButton.setAttribute('aria-expanded', 'false');
-                }
-
-                activeButton = null;
-                activeCategory = null;
-            }
-
-            function positionActionMenu(button) {
-                if (!actionMenu || !button) return;
-
-                actionMenu.hidden = false;
-
-                const buttonRect = button.getBoundingClientRect();
-                const menuRect = actionMenu.getBoundingClientRect();
-                const padding = 10;
-
-                let top = buttonRect.bottom + 6;
-                let left = buttonRect.right - menuRect.width;
-
-                left = Math.max(padding, Math.min(left, window.innerWidth - menuRect.width - padding));
-
-                if (top + menuRect.height > window.innerHeight - padding) {
-                    top = buttonRect.top - menuRect.height - 6;
-                }
-
-                top = Math.max(padding, top);
-
-                actionMenu.style.top = `${top}px`;
-                actionMenu.style.left = `${left}px`;
-            }
-
-            function openActionMenu(button) {
-                const categoryId = button.dataset.categoryId;
-
-                if (!categoryId) return;
-
-                if (activeButton === button && !actionMenu.hidden) {
-                    closeActionMenu();
-                    return;
-                }
-
-                closeActionMenu();
-
-                activeButton = button;
-                activeCategory = {
-                    id: categoryId,
-                    name: button.closest('tr')?.querySelector('.master-name')?.textContent.trim() || '',
-                    status: button.dataset.categoryStatus
-                };
-
-                actionEdit.hidden = activeCategory.status === 'inactive';
-                actionDeactivate.hidden = activeCategory.status === 'inactive';
-                actionRestore.hidden = activeCategory.status !== 'inactive';
-
-                button.setAttribute('aria-expanded', 'true');
-                positionActionMenu(button);
-            }
-
-            document.querySelectorAll('.js-category-action').forEach(function(button) {
-                button.addEventListener('click', function(event) {
-                    event.stopPropagation();
-                    openActionMenu(this);
+                    bootstrap.Modal.getOrCreateInstance(editModal).show();
                 });
             });
 
-            actionEdit.addEventListener('click', function() {
-                if (!activeCategory || !editForm || !editInput) return;
+            document.querySelectorAll('.js-delete-category').forEach(function(button) {
+                button.addEventListener('click', function() {
+                    const id = this.dataset.id;
 
-                editForm.action = buildCategoryUrl(categoryUpdateUrl, activeCategory.id);
-                editInput.value = activeCategory.name;
+                    deleteForm.action = deleteUrl.replace('__ID__', id);
+                    deleteName.textContent = this.dataset.name;
 
-                closeActionMenu();
-                bootstrap.Modal.getOrCreateInstance(editModalElement).show();
-
-                setTimeout(function() {
-                    editInput.focus();
-                    editInput.select();
-                }, 300);
+                    bootstrap.Modal.getOrCreateInstance(deleteModal).show();
+                });
             });
 
-            actionDeactivate.addEventListener('click', function() {
-                if (!activeCategory || !deactivateForm || !deactivateName) return;
+            document.getElementById('categorySearch').addEventListener('input', function() {
+                const keyword = this.value.toLowerCase();
 
-                deactivateForm.action = buildCategoryUrl(categoryDeactivateUrl, activeCategory.id);
-                deactivateName.textContent = activeCategory.name;
+                document.querySelectorAll('#categoryTable tbody tr').forEach(function(row) {
+                    const name = row.querySelector('.category-name');
 
-                closeActionMenu();
-                bootstrap.Modal.getOrCreateInstance(deactivateModalElement).show();
-            });
-
-            actionRestore.addEventListener('click', function() {
-                if (!activeCategory || !restoreForm || !restoreName) return;
-
-                restoreForm.action = buildCategoryUrl(categoryRestoreUrl, activeCategory.id);
-                restoreName.textContent = activeCategory.name;
-
-                closeActionMenu();
-                bootstrap.Modal.getOrCreateInstance(restoreModalElement).show();
-            });
-
-            document.addEventListener('click', function(event) {
-                if (!event.target.closest('.js-category-action') &&
-                    !event.target.closest('#categoryActionMenu')) {
-                    closeActionMenu();
-                }
-            });
-
-            window.addEventListener('resize', function() {
-                if (activeButton && !actionMenu.hidden) positionActionMenu(activeButton);
-            });
-
-            window.addEventListener('scroll', function() {
-                if (activeButton && !actionMenu.hidden) positionActionMenu(activeButton);
-            }, true);
-
-            document.getElementById('createCategoryModal')?.addEventListener('shown.bs.modal', function() {
-                document.getElementById('create_category_name')?.focus();
+                    if (name) {
+                        row.style.display = name.textContent.toLowerCase().includes(keyword) ?
+                            '' :
+                            'none';
+                    }
+                });
             });
         });
     </script>

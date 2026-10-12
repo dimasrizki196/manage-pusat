@@ -24,9 +24,8 @@ class CategoryController extends Controller
         ]);
     }
 
-    public function store(
-        StoreCategoryRequest $request
-    ): RedirectResponse {
+    public function store(StoreCategoryRequest $request): RedirectResponse
+    {
         $this->categoryService->create(
             $request->validated(),
             Auth::id()
@@ -52,9 +51,8 @@ class CategoryController extends Controller
             ->with('success', 'Kategori berhasil diperbarui.');
     }
 
-    public function destroy(
-        Category $category
-    ): RedirectResponse {
+    public function destroy(Category $category): RedirectResponse
+    {
         $this->categoryService->delete(
             $category,
             Auth::id()
@@ -65,17 +63,8 @@ class CategoryController extends Controller
             ->with('success', 'Kategori berhasil dinonaktifkan.');
     }
 
-    public function restore(
-        int $id
-    ): RedirectResponse {
-        $category = Category::withTrashed()->findOrFail($id);
-
-        if (!$category->trashed()) {
-            return redirect()
-                ->route('admin.categories.index')
-                ->with('info', 'Kategori sudah aktif.');
-        }
-
+    public function restore(Category $category): RedirectResponse
+    {
         $this->categoryService->restore(
             $category,
             Auth::id()

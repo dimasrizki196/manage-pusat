@@ -114,6 +114,7 @@ Route::middleware('auth')->group(function () {
                 'store',
                 'update',
                 'destroy',
+                'restore',
             ]);
 
             Route::resource('items', ItemController::class)
