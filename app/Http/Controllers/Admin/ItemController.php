@@ -124,12 +124,9 @@ class ItemController extends Controller
         } catch (ValidationException $e) {
             return redirect()
                 ->route('admin.items.index')
-                ->withErrors($e->errors())
-                ->withInput()
-                ->with('open_item_modal', true);
+                ->with('error', $e->errors()['item'][0] ?? 'Barang gagal dihapus permanen.');
         }
     }
-
     public function show(
         int $id
     ): View {

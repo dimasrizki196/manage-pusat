@@ -298,17 +298,14 @@
                     <input type="hidden" name="_method" id="itemFormMethod" value="{{ old('_method', 'POST') }}">
 
                     <div class="modal-body">
-                        {{-- VALIDASI ERROR DIPINDAH KESINI --}}
                         @if ($errors->any())
                             <div class="items-alert items-alert-danger mb-4">
                                 <i class="bi bi-exclamation-circle-fill"></i>
-
                                 <div>
                                     @foreach ($errors->all() as $error)
                                         <div>{{ $error }}</div>
                                     @endforeach
                                 </div>
-
                                 <button type="button" class="btn-close" data-bs-dismiss="alert"
                                     aria-label="Tutup"></button>
                             </div>
@@ -411,13 +408,6 @@
             const itemFormModal = itemFormModalElement ?
                 bootstrap.Modal.getOrCreateInstance(itemFormModalElement) :
                 null;
-
-            // MENAMPILKAN KEMBALI MODAL JIKA ADA ERROR VALIDASI SETELAH RELOAD
-            @if ($errors->any())
-                if (itemFormModal) {
-                    itemFormModal.show();
-                }
-            @endif
 
             const actionMenu = document.getElementById('itemActionMenu');
             const actionShow = document.getElementById('itemActionShow');
