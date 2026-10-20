@@ -25,7 +25,7 @@
                 </a>
             </div>
         </div>
- 
+
         <div class="users-form-card">
             <div class="users-form-header">
                 <div class="users-form-header-icon">
@@ -63,7 +63,10 @@
                         <div class="users-form-group">
                             <label for="phone_number">Nomor HP</label>
                             <input type="text" id="phone_number" name="phone_number" value="{{ old('phone_number') }}"
-                                placeholder="08xxxxxxxxxx">
+                                placeholder="628xxxxxxxxxxx">
+                            @error('phone_number')
+                                <div class="users-form-error">{{ $message }}</div>
+                            @enderror
                         </div>
 
                         <div class="users-form-group">
