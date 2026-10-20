@@ -238,7 +238,7 @@
             forceDeleteForm.style.display = 'none';
             divider.style.display = 'none';
 
-            if (user.isSelf || user.role === 'admin') {
+            if (user.isSelf) {
                 showButton.style.display = 'flex';
             } else {
                 divider.style.display = 'block';

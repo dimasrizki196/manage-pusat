@@ -26,6 +26,7 @@ class StoreUserRequest extends FormRequest
             'username' => [
                 'required',
                 'string',
+                'min:5',
                 'max:50',
                 'alpha_dash',
                 Rule::unique('users', 'username'),
@@ -34,7 +35,8 @@ class StoreUserRequest extends FormRequest
             'phone_number' => [
                 'nullable',
                 'string',
-                'max:20',
+                'regex:/^628[0-9]{8,11}$/',
+                'max:14',
             ],
 
             'password' => [
@@ -68,6 +70,11 @@ class StoreUserRequest extends FormRequest
 
             'username.alpha_dash' =>
             'Username hanya boleh menggunakan huruf, angka, dash, dan underscore.',
+
+            'username.min' => 'Username minimal 5 karakter',
+
+            'phone_number.regex' => 'Nomor HP harus diawali 62 tanpa + dan hanya berisi angka.',
+            'phone_number.max' => 'Nomor HP maksimal 14 digit.',
 
             'password.min' =>
             'Password minimal 8 karakter.',

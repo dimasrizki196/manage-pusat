@@ -147,12 +147,6 @@ class UserController extends Controller
     private function ensureCanManage(User $user): void
     {
         abort_if(
-            $user->role === 'admin',
-            403,
-            'Data admin tidak dapat diubah.'
-        );
-
-        abort_if(
             $user->id === Auth::id(),
             403,
             'Anda tidak dapat mengubah akun sendiri.'
