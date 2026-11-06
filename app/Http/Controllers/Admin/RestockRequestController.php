@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\RestockRequest\ApproveRestockRequest;
 use App\Http\Requests\Admin\RestockRequest\RejectRestockRequest;
 use App\Services\RestockRequestService;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -54,7 +55,7 @@ class RestockRequestController extends Controller
                 ->route('admin.restock-requests.index')
                 ->with(
                     'success',
-                    'Ajuan restock berhasil disetujui dan stok telah ditambahkan.'
+                    'Ajuan restock berhasil disetujui.'
                 );
         } catch (\RuntimeException $e) {
             return redirect()
@@ -66,7 +67,7 @@ class RestockRequestController extends Controller
     public function reject(
         RejectRestockRequest $request,
         int $id
-    ): RedirectResponse {
+    ): JsonResponse|RedirectResponse {
         try {
             $this->restockRequestService->reject(
                 $id,
@@ -74,15 +75,28 @@ class RestockRequestController extends Controller
                 $request->validated('rejection_reason')
             );
 
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Ajuan restock berhasil ditolak.',
+                    'redirect' => route('admin.restock-requests.index'),
+                ]);
+            }
+
             return redirect()
                 ->route('admin.restock-requests.index')
-                ->with(
-                    'success',
-                    'Ajuan restock berhasil ditolak.'
-                );
+                ->with('success', 'Ajuan restock berhasil ditolak.');
         } catch (\RuntimeException $e) {
+            if ($request->expectsJson()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $e->getMessage(),
+                ], 422);
+            }
+
             return redirect()
-                ->route('admin.restock-requests.index')
+                ->back()
+                ->withInput()
                 ->with('error', $e->getMessage());
         }
     }

@@ -72,6 +72,7 @@
                             <th>Kategori</th>
                             <th>Jumlah</th>
                             <th>Status</th>
+                            <th>Alasan</th>
                             <th>Diajukan</th>
                             <th class="column-action"></th>
                         </tr>
@@ -142,6 +143,12 @@
                                     <span class="restock-status {{ $statusClass }}">
                                         <i class="bi {{ $statusIcon }}"></i>
                                         <span>{{ $statusLabel }}</span>
+                                    </span>
+                                </td>
+
+                                <td>
+                                    <span class="rejection-reason">
+                                        {{ $request->rejection_reason ?? '-' }}
                                     </span>
                                 </td>
 

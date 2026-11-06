@@ -11,6 +11,15 @@ class RejectRestockRequest extends FormRequest
         return $this->user()?->role === 'admin';
     }
 
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'rejection_reason' => trim(
+                (string) $this->input('rejection_reason', '')
+            ),
+        ]);
+    }
+
     public function rules(): array
     {
         return [
@@ -26,6 +35,7 @@ class RejectRestockRequest extends FormRequest
     {
         return [
             'rejection_reason.required' => 'Alasan penolakan wajib diisi.',
+            'rejection_reason.string' => 'Alasan penolakan harus berupa teks.',
             'rejection_reason.max' => 'Alasan penolakan maksimal 1000 karakter.',
         ];
     }

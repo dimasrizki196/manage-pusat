@@ -29,7 +29,6 @@ return new class extends Migration
             // Relasi ke tabel log aktivitas (asumsi nama tabel: activity_logs)
             $table->foreignId('activity_id')->nullable()->constrained('activity_logs')->nullOnDelete();
 
-            // public $timestamps = false; pada model berarti tidak ada $table->timestamps();
         });
     }
 

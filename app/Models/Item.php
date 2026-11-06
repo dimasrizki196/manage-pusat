@@ -16,13 +16,19 @@ class Item extends Model
         'unit_id',
         'stock',
         'stock_min',
+        'lead_time_days',
+        'safety_stock',
         'activity_id',
     ];
-
-    protected $casts = [
-        'stock' => 'decimal:2',
-        'stock_min' => 'decimal:2',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'stock' => 'decimal:2',
+            'stock_min' => 'decimal:2',
+            'lead_time_days' => 'integer',
+            'safety_stock' => 'decimal:2',
+        ];
+    }
 
     public function category(): BelongsTo
     {
@@ -42,9 +48,9 @@ class Item extends Model
         );
     }
 
-    public function transactions(): HasMany
+    public function transactions()
     {
-        return $this->hasMany(Transaction::class);
+        return $this->hasMany(Transaction::class, 'item_id');
     }
 
     public function isLowStock(): bool

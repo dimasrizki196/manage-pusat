@@ -14,11 +14,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
 use Illuminate\Validation\ValidationException;
+use App\Services\ReorderPointService;
 
 class ItemController extends Controller
 {
     public function __construct(
-        private ItemService $itemService
+        private ItemService $itemService,
+        private ReorderPointService $reorderPointService
     ) {}
 
     public function index(Request $request)
@@ -139,6 +141,11 @@ class ItemController extends Controller
                 'activity.deleter',
             ])
             ->findOrFail($id);
+
+        $item->setAttribute(
+            'rop_data',
+            $this->reorderPointService->calculate($item)
+        );
 
         return view(
             'admin.items.show',

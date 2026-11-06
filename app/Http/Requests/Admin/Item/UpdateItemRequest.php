@@ -40,6 +40,18 @@ class UpdateItemRequest extends FormRequest
                 'numeric',
                 'min:0',
             ],
+
+            'lead_time_days' => [
+                'required',
+                'integer',
+                'min:1',
+            ],
+
+            'safety_stock' => [
+                'required',
+                'numeric',
+                'min:0',
+            ],
         ];
     }
 
@@ -59,6 +71,14 @@ class UpdateItemRequest extends FormRequest
             'stock_min.required' => 'Stok minimum wajib diisi.',
             'stock_min.numeric' => 'Stok minimum harus berupa angka.',
             'stock_min.min' => 'Stok minimum tidak boleh kurang dari 0.',
+
+            'lead_time_days.required' => 'Lead time wajib diisi.',
+            'lead_time_days.integer' => 'Lead time harus berupa angka.',
+            'lead_time_days.min' => 'Lead time tidak boleh kurang dari 1 hari.',
+
+            'safety_stock.required' => 'Safety stock wajib diisi.',
+            'safety_stock.numeric' => 'Safety stock harus berupa angka.',
+            'safety_stock.min' => 'Safety stock tidak boleh kurang dari 0.',
         ];
     }
 }

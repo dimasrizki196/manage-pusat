@@ -10,14 +10,15 @@ use Illuminate\Validation\ValidationException;
 class ItemService
 {
     public function __construct(
-        private ActivityLogService $activityLogService
+        private ActivityLogService $activityLogService,
+        private ReorderPointService $reorderPointService
     ) {}
 
     public function paginate(
         array $filters = [],
         int $perPage = 10
     ): LengthAwarePaginator {
-        return Item::query()
+        $items = Item::query()
             ->with([
                 'category',
                 'unit',
@@ -65,6 +66,14 @@ class ItemService
             ->orderBy('name')
             ->paginate($perPage)
             ->withQueryString();
+
+        $items->getCollection()->transform(function ($item) {
+            $item->rop_data = $this->reorderPointService->calculate($item);
+
+            return $item;
+        });
+
+        return $items;
     }
 
     public function create(array $data, int $userId): Item
@@ -76,6 +85,8 @@ class ItemService
                 'unit_id' => $data['unit_id'],
                 'stock' => $data['stock'] ?? 0,
                 'stock_min' => $data['stock_min'] ?? 0,
+                'lead_time_days' => $data['lead_time_days'],
+                'safety_stock' => $data['safety_stock'],
             ]);
 
             $activity = $this->activityLogService->create(
@@ -90,6 +101,7 @@ class ItemService
             return $item->fresh([
                 'category',
                 'unit',
+                'activity',
             ]);
         });
     }
@@ -105,6 +117,8 @@ class ItemService
                 'name' => $data['name'],
                 'unit_id' => $data['unit_id'],
                 'stock_min' => $data['stock_min'] ?? 0,
+                'lead_time_days' => $data['lead_time_days'],
+                'safety_stock' => $data['safety_stock'],
             ]);
 
             $this->activityLogService->update(
@@ -115,6 +129,7 @@ class ItemService
             return $item->fresh([
                 'category',
                 'unit',
+                'activity',
             ]);
         });
     }
@@ -131,28 +146,26 @@ class ItemService
         });
     }
 
-
     public function forceDelete(Item $item, int $userId): void
     {
         DB::transaction(function () use ($item) {
             $hasRestockRequests = DB::table('restock_requests')
                 ->where('item_id', $item->id)
                 ->exists();
-    
+
             $hasTransactions = DB::table('transactions')
                 ->where('item_id', $item->id)
                 ->exists();
-    
+
             if ($hasRestockRequests || $hasTransactions) {
                 throw ValidationException::withMessages([
                     'item' => 'Barang tidak dapat dihapus permanen karena masih memiliki riwayat pengajuan restock atau transaksi.',
                 ]);
             }
-    
+
             $item->delete();
         });
     }
-
 
     public function restore(Item $item, int $userId): Item
     {
